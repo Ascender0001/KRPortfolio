@@ -1,0 +1,39 @@
+:root {
+  color-scheme: dark;
+
+  /* Main background */
+  --bg: #101018;
+  --bg-secondary: #181820;
+  --surface: #181820;
+  --surface-strong: #202030;
+
+  /* Signature yellow */
+  --accent: #ffff00;
+  --accent-bright: #d8d800; /* hover / pressed variant */
+  --accent-dim: rgba(255, 255, 0, 0.09);
+
+  /* Light UI */
+  --invert-bg: #f8f8f8;
+  --invert-text: #202020;
+  --steel: #606068;
+
+  /* Text */
+  --text: #f0f0f0;
+  --muted: #a8a8b0;
+
+  /* Lines / borders */
+  --line: #303038;
+  --line-soft: rgba(140, 140, 160, 0.1);
+  --line-strong: #606068;
+
+  --font-display: 'Inter', sans-serif;
+  --font-ui: 'IBM Plex Mono', monospace;
+
+  --content-width: 1180px;
+  --header-height: 72px;
+  --section-padding: clamp(80px, 10vw, 180px);
+
+  /* Cinematic motion */
+  --ease-cine: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-cine: 0.9s;
+}

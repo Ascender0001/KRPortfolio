@@ -1,199 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Király Róbert személyes portfóliója. Web- és játékfejlesztési projektek, tapasztalat, készségek és elérhetőségek.">
-  <title>Király Róbert | Portfólió</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Ichigo redesign: keep existing content but load a sharper display weight for cinematic headings. -->
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <a class="skip-link" href="#hero">Ugrás a tartalomra</a>
-
-  <header class="site-header">
-    <nav class="navbar" aria-label="Fő navigáció">
-      <a class="brand" href="#hero" aria-label="Király Róbert kezdőlap">
-        <span class="brand-mark">KR</span>
-        <span class="brand-text">Király Róbert</span>
-      </a>
-
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
-        <span class="nav-toggle-lines" aria-hidden="true"></span>
-        <span class="sr-only">Menü megnyitása</span>
-      </button>
-
-      <div class="nav-panel" id="primary-navigation">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects / Experience</a>
-        <a href="#contact">Contact</a>
-      </div>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero section" id="hero">
-      <div class="hero-copy reveal">
-        <p class="eyebrow">Web- és játékfejlesztés</p>
-        <h1>Király Róbert</h1>
-        <p class="tagline">Informatika szakos hallgató, aki modern webalkalmazásokkal és játékfejlesztéssel szeretne valódi értéket építeni.</p>
-        <p class="hero-text">A technológia világában már középiskolás éveim óta folyamatosan bővítem a tudásomat, és olyan projektekben szeretek dolgozni, ahol a design, a funkcionalitás és a gyakorlati megoldások együtt jelennek meg.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#projects">Nézd meg a munkáimat</a>
-          <a class="button button-secondary" href="#contact">Kapcsolat</a>
-        </div>
-      </div>
-
-      <aside class="hero-card reveal" aria-label="Gyors áttekintés">
-        <div class="card-glow"></div>
-        <p class="card-label">Profil</p>
-        <p class="card-lead">Szenvedélyesen érdeklődöm a web- és játékfejlesztés iránt, és folyamatosan keresem azokat a kihívásokat, ahol fejlődhetek.</p>
-        <dl class="quick-facts">
-          <div>
-            <dt>Telefon</dt>
-            <dd><a href="tel:+38163395603">+381 63-395-603</a></dd>
-          </div>
-          <div>
-            <dt>E-mail</dt>
-            <dd><a href="mailto:kiralyrobert2004@gmail.com">kiralyrobert2004@gmail.com</a></dd>
-          </div>
-          <div>
-            <dt>Fókusz</dt>
-            <dd>Web, React, JavaScript, Python</dd>
-          </div>
-        </dl>
-      </aside>
-    </section>
-
-    <section class="section" id="about">
-      <div class="section-heading reveal">
-        <p class="eyebrow">About</p>
-        <h2>Rövid bemutatkozás</h2>
-      </div>
-      <div class="about-grid">
-        <article class="panel reveal">
-          <p>
-            Informatika szakos hallgató vagyok a Szabadkai Műszaki Szakfőiskolán, és az a célom,
-            hogy a front-end és a termékfelépítés területén egyre erősebb, megbízhatóbb munkákat hozzak létre.
-          </p>
-          <p>
-            Már középiskolás éveim óta folyamatosan építem a technikai alapjaimat, és olyan munkákat keresek,
-            ahol a tanulás, a gyakorlati kivitelezés és a csapatmunka egyszerre van jelen.
-          </p>
-        </article>
-
-        <article class="panel reveal">
-          <h3>Education</h3>
-          <div class="timeline">
-            <div class="timeline-item">
-              <span class="timeline-time">2019 – 2023</span>
-              <h4>Ivan Sarić Műszaki Iskola</h4>
-              <p>Információs technológiák elektrotechnikusa</p>
-            </div>
-            <div class="timeline-item">
-              <span class="timeline-time">2023 – jelenleg</span>
-              <h4>Szabadkai Műszaki Szakfőiskola</h4>
-              <p>Informatika</p>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="skills">
-      <div class="section-heading reveal">
-        <p class="eyebrow">Skills</p>
-        <h2>Használt technológiák</h2>
-      </div>
-      <div class="skills-grid reveal">
-        <span>HTML / CSS</span>
-        <span>JavaScript</span>
-        <span>React / React Native</span>
-        <span>Python</span>
-        <span>C / C#</span>
-        <span>SQL</span>
-        <span>Expo</span>
-      </div>
-    </section>
-
-    <section class="section" id="projects">
-      <div class="section-heading reveal">
-        <p class="eyebrow">Projects / Experience</p>
-        <h2>Projektek és szakmai tapasztalat</h2>
-      </div>
-
-      <div class="cards-grid">
-        <article class="project-card reveal">
-          <p class="card-kicker">Projekt</p>
-          <h3>DnD-Site</h3>
-          <p>Egy modern webalkalmazás a D&D 5e karakterek létrehozásához és kezeléséhez.</p>
-          <div class="tags">
-            <span>Vite</span>
-            <span>Supabase</span>
-          </div>
-        </article>
-
-        <article class="project-card reveal">
-          <p class="card-kicker">Projekt</p>
-          <h3>Mepper-Pill</h3>
-          <p>Egy minimalista, underground stílusú ételfutár alkalmazás, amelyet jelenleg Palicson használnak.</p>
-          <div class="tags">
-            <span>Vite</span>
-            <span>Supabase</span>
-            <span>React</span>
-            <span>TypeScript</span>
-          </div>
-        </article>
-
-        <article class="project-card reveal">
-          <p class="card-kicker">Experience</p>
-          <h3>Studio Present</h3>
-          <p>Front-End Gyakornok</p>
-          <div class="meta-row">
-            <span>2 hét</span>
-            <span>2023</span>
-          </div>
-        </article>
-
-        <article class="project-card reveal">
-          <p class="card-kicker">Experience</p>
-          <h3>Mustard Seed Credo Limited Company</h3>
-          <p>Code Analytics</p>
-          <div class="meta-row">
-            <span>2 hónap</span>
-            <span>2025</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section contact-section" id="contact">
-      <div class="section-heading reveal">
-        <p class="eyebrow">Contact</p>
-        <h2>Elérhetőség</h2>
-      </div>
-
-      <div class="contact-grid reveal">
-        <a class="contact-card" href="mailto:kiralyrobert2004@gmail.com">
-          <span>E-mail</span>
-          <strong>kiralyrobert2004@gmail.com</strong>
-        </a>
-        <a class="contact-card" href="tel:+38163395603">
-          <span>Telefon</span>
-          <strong>+381 63-395-603</strong>
-        </a>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <p>© 2026 Király Róbert</p>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Király Róbert személyes portfóliója. Web- és játékfejlesztési projektek, tapasztalat, készségek és elérhetőségek."
+    />
+    <title>Király Róbert | Portfólió</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
