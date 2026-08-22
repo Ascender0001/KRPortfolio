@@ -1024,19 +1024,19 @@ svg {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html:not(.motion-force) {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
+  html:not(.motion-force) *,
+  html:not(.motion-force) *::before,
+  html:not(.motion-force) *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 
-  .section-heading .heading-line {
+  html:not(.motion-force) .section-heading .heading-line {
     transform: scaleX(1);
   }
 }

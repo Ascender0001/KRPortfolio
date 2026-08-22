@@ -1,13 +1,22 @@
 import { useLayoutEffect, useRef } from 'react'
 import { animate, utils } from 'animejs'
 
+// Explicit opt-out of the OS accessibility setting: append ?motion=force to the URL.
+if (
+  typeof window !== 'undefined' &&
+  new URLSearchParams(window.location.search).get('motion') === 'force'
+) {
+  document.documentElement.classList.add('motion-force')
+}
+
 export const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
+  !document.documentElement.classList.contains('motion-force') &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 if (prefersReducedMotion()) {
   console.info(
-    '[KRPortfolio] prefers-reduced-motion is active — all entrance/hover animations are intentionally disabled.',
+    '[KRPortfolio] prefers-reduced-motion is active — animations are disabled. Add ?motion=force to the URL to preview with animations.',
   )
 }
 
