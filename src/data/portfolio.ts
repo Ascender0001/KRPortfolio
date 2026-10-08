@@ -94,6 +94,12 @@ export interface ProjectFile {
 
 export const projects: ProjectFile[] = [
   {
+    kind: 'Tapasztalat',
+    title: 'Studio Present',
+    description: 'Front-End Gyakornok',
+    meta: ['Jelenleg', '2026–'],
+  },
+  {
     kind: 'Projekt',
     title: 'Fret Trainer',
     description:
@@ -106,12 +112,6 @@ export const projects: ProjectFile[] = [
     description:
       'Minimalista, underground stílusú ételfutár alkalmazás, amelyet jelenleg Palicson használnak.',
     tags: ['Vite', 'Supabase', 'React', 'TypeScript'],
-  },
-  {
-    kind: 'Tapasztalat',
-    title: 'Studio Present',
-    description: 'Front-End Gyakornok',
-    meta: ['Jelenleg', '2026–'],
   },
   {
     kind: 'Tapasztalat',
