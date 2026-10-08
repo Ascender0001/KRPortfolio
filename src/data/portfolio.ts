@@ -111,7 +111,7 @@ export const projects: ProjectFile[] = [
     kind: 'Tapasztalat',
     title: 'Studio Present',
     description: 'Front-End Gyakornok',
-    meta: ['2 hét', '2023'],
+    meta: ['Jelenleg', '2026–'],
   },
   {
     kind: 'Tapasztalat',
