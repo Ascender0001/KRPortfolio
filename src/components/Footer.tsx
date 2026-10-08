@@ -120,22 +120,17 @@ export function Footer() {
               <LocalTime />
             </p>
             <p className="footer-small">{site.location}</p>
-            <button type="button" className="to-top" onClick={toTop}>
-              Vissza a tetejére <span aria-hidden="true">↑</span>
-            </button>
           </div>
         </div>
-
-        <p className="footer-wordmark" aria-hidden="true">
-          {site.name}
-        </p>
 
         <div className="footer-bottom">
           <p className="footer-small">
             © {year} {site.name}
           </p>
           <MotionSwitch />
-          <p className="footer-small">React · TypeScript · three.js</p>
+          <button type="button" className="to-top" onClick={toTop}>
+            Vissza a tetejére <span aria-hidden="true">↑</span>
+          </button>
         </div>
       </div>
     </footer>
