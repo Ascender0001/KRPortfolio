@@ -67,14 +67,19 @@ export const skillsSection = {
   heading: 'Használt technológiák',
 }
 
-export const skills = [
-  'HTML / CSS',
-  'JavaScript',
-  'React / React Native',
-  'Python',
-  'C / C#',
-  'SQL',
-  'Expo',
+export interface Skill {
+  name: string
+  note: string
+}
+
+export const skills: Skill[] = [
+  { name: 'HTML / CSS', note: 'Reszponzív, letisztult felületek' },
+  { name: 'JavaScript', note: 'Interaktív webes logika' },
+  { name: 'React / React Native', note: 'Komponens alapú web- és mobilappok' },
+  { name: 'Python', note: 'Szkriptek és automatizálás' },
+  { name: 'C / C#', note: 'Programozási alapok, játékfejlesztés' },
+  { name: 'SQL', note: 'Adatbázisok és lekérdezések' },
+  { name: 'Expo', note: 'Mobilalkalmazások gyors fejlesztése' },
 ]
 
 export const projectsSection = {

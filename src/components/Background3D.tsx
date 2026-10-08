@@ -7,7 +7,7 @@ import { isReducedMotion } from '../motion'
 const SECTIONS = [
   { id: 'hero', side: 0.72, opacity: 1 },
   { id: 'about', side: 1, opacity: 0.95 },
-  { id: 'skills', side: -1, opacity: 0.95 },
+  { id: 'skills', side: 0, opacity: 0.5 },
   { id: 'projects', side: 0, opacity: 0.45 },
   { id: 'contact', side: 0, opacity: 0.6 },
 ]

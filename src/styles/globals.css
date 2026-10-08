@@ -356,6 +356,11 @@ main,
 
 /* ---------- Hero ---------- */
 
+/* The name lines slide apart as the hero scrolls away; keep them from widening the page. */
+.hero {
+  overflow-x: clip;
+}
+
 .hero-inner {
   position: relative;
 }
@@ -490,43 +495,100 @@ main,
   color: var(--muted);
 }
 
-/* ---------- Skills ---------- */
+/* ---------- Skills: giant outlined names that fill in as they scroll by ---------- */
 
 .skill-list {
-  margin-top: 2.2rem;
+  margin-top: clamp(2rem, 5vh, 3.5rem);
   border-top: 1px solid var(--line);
 }
 
+/* --fill (0→1) and --focus (0→1) are scrubbed by scroll in Skills.tsx; hover also lifts a row. */
 .skill-row {
-  display: flex;
-  align-items: baseline;
-  gap: 1.2rem;
-  padding: 0.85rem 0;
+  --fill: 1;
+  --focus: 0;
+  --hover: 0;
+  --lift: max(var(--focus), var(--hover));
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.2rem 1.5rem;
+  padding: clamp(0.5rem, 1.4vh, 0.9rem) 0;
   border-bottom: 1px solid var(--line);
-  transition: padding-left 0.35s var(--ease);
 }
 
 .skill-row:hover {
-  padding-left: 0.8rem;
+  --hover: 1;
+}
+
+/* Red rule that sweeps along the bottom of the spotlighted row. */
+.skill-row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-bright), transparent 80%);
+  transform: scaleX(var(--lift));
+  transform-origin: left;
+  transition: transform 0.3s var(--ease);
 }
 
 .skill-num {
   font-family: var(--font-display);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: var(--accent-text);
+  color: color-mix(in srgb, var(--accent-text) calc(var(--lift) * 100%), var(--faint));
 }
 
 .skill-name {
+  position: relative;
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  transition: color 0.3s ease;
+  font-size: clamp(2.1rem, 5.6vw, 5rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  transform: translateX(calc(var(--lift) * 1.6rem));
+  transition: transform 0.45s var(--ease);
 }
 
-.skill-row:hover .skill-name {
-  color: var(--accent-bright);
+/* Solid copy of the name on top, revealed left to right by --fill. */
+.skill-fill {
+  position: absolute;
+  inset: 0;
+  color: color-mix(in srgb, var(--accent-bright) calc(var(--lift) * 100%), var(--text));
+  -webkit-text-stroke: 0 transparent;
+  text-shadow: 0 0 calc(var(--lift) * 40px) rgba(255, 30, 20, calc(var(--lift) * 0.55));
+  clip-path: inset(-20% calc((1 - var(--fill)) * 100%) -20% 0);
+}
+
+.skill-note {
+  justify-self: end;
+  max-width: 17rem;
+  text-align: right;
+  font-size: 0.95rem;
+  color: var(--muted);
+  opacity: calc(0.22 + var(--lift) * 0.78);
+  transform: translateX(calc((1 - var(--lift)) * 14px));
+  transition:
+    opacity 0.35s ease,
+    transform 0.45s var(--ease);
+}
+
+@media (max-width: 720px) {
+  .skill-row {
+    grid-template-columns: 2.2rem minmax(0, 1fr);
+  }
+
+  .skill-note {
+    grid-column: 2;
+    justify-self: start;
+    text-align: left;
+    max-width: none;
+  }
 }
 
 /* ---------- Projects: glass cards over the 3D field ---------- */
@@ -797,8 +859,11 @@ html[data-motion='reduced'] .scroll-hint-mouse i {
   animation: none;
 }
 
-html[data-motion='reduced'] .btn:hover,
-html[data-motion='reduced'] .skill-row:hover {
+html[data-motion='reduced'] .btn:hover {
   transform: none;
-  padding-left: 0;
+}
+
+html[data-motion='reduced'] .skill-name,
+html[data-motion='reduced'] .skill-note {
+  transform: none;
 }
