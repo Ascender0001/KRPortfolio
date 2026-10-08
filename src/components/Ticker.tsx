@@ -3,7 +3,7 @@ import { animate } from 'animejs'
 import { prefersReducedMotion } from '../hooks/useReveal'
 
 const phrase =
-  'OVER THE FRONTIER // KIRÁLY RÓBERT // WEB- ÉS JÁTÉKFEJLESZTÉS // SZABADKA, HU // '
+  'OVER THE FRONTIER // KIRÁLY RÓBERT // WEB- ÉS JÁTÉKFEJLESZTÉS // SZABADKA, SZERBIA // '
 
 export function Ticker() {
   const trackRef = useRef<HTMLDivElement>(null)

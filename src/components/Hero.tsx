@@ -205,6 +205,7 @@ export function Hero() {
       </div>
 
       <h1 className="hero-title">
+        <span className="sr-only">{site.name}</span>
         <span className="hero-title-line" data-line="1">
           <SplitText text={hero.firstName} />
         </span>

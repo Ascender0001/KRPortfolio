@@ -1,32 +1,30 @@
-# React + TypeScript + Vite
+# KRPortfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Personal portfolio of Király Róbert — live at **[ascender.codes](https://ascender.codes/)**.
 
-Currently, two official plugins are available:
+Built with React 19, TypeScript and Vite, with entrance/scroll motion driven by [anime.js](https://animejs.com/). Hosted on Netlify.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Development
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev      # local dev server
+npm run build    # type-check + production build into dist/
+npm run lint     # oxlint
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Structure
+
+- `src/data/portfolio.ts` — all site content (text, projects, skills, contact channels). Edit this to update the page.
+- `src/components/` — page sections (Hero, About, Skills, Projects, Contact, …).
+- `src/hooks/` — motion helpers (`useReveal`, `useStaggerChildren`, `useTilt`).
+- `src/styles/` — design tokens, global styles and animations.
+- `public/` — static files served as-is (favicon, CV, robots.txt, sitemap).
+
+## Motion
+
+Animations respect the OS `prefers-reduced-motion` setting. Append `?motion=force` to the URL to preview them anyway.
+
+## Deployment
+
+Netlify builds `main` automatically using `netlify.toml` (`npm run build` → `dist/`, Node 22), which also sets security and caching headers.
