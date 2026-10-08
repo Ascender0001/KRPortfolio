@@ -4,6 +4,8 @@ import { useScrollReveal } from '../scroll/useScrollReveal'
 export function Contact() {
   const sectionRef = useScrollReveal<HTMLElement>()
   const [email, phone] = channels
+  // Let the address wrap after the @ on narrow screens instead of mid-word.
+  const [emailUser, emailDomain] = email.value.split('@')
 
   return (
     <section className="section contact" id="contact" ref={sectionRef}>
@@ -19,7 +21,8 @@ export function Contact() {
         </p>
 
         <a className="contact-email" href={email.href} data-reveal>
-          {email.value}
+          {emailUser}@<wbr />
+          {emailDomain}
         </a>
 
         <div className="contact-links" data-reveal>
