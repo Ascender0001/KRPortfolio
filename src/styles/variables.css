@@ -1,30 +1,33 @@
 :root {
   color-scheme: dark;
 
-  /* Main background */
-  --bg: #101018;
-  --bg-secondary: #181820;
-  --surface: #181820;
-  --surface-strong: #202030;
+  /* Main background: near-black */
+  --bg: #0a0a0a;
+  --bg-secondary: #0f0f0f;
+  --surface: #121212;
+  --surface-strong: #1a1414;
 
-  /* Signature yellow */
-  --accent: #ffff00;
-  --accent-bright: #d8d800; /* hover / pressed variant */
-  --accent-dim: rgba(255, 255, 0, 0.09);
+  /* Signature red */
+  --accent: #e10600;
+  --accent-bright: #ff2a1f; /* hover / pressed variant */
+  --accent-text: #ff4a3d; /* red that stays readable as small text on black */
+  --accent-dim: rgba(225, 6, 0, 0.16);
+  --accent-glow: rgba(255, 30, 20, 0.45);
+  --on-accent: #ffffff;
 
   /* Light UI */
-  --invert-bg: #f8f8f8;
-  --invert-text: #202020;
-  --steel: #606068;
+  --invert-bg: #f2f2f2;
+  --invert-text: #0a0a0a;
+  --steel: #6b6566;
 
   /* Text */
-  --text: #f0f0f0;
-  --muted: #a8a8b0;
+  --text: #f2f2f2;
+  --muted: #a39d9d;
 
   /* Lines / borders */
-  --line: #303038;
-  --line-soft: rgba(140, 140, 160, 0.1);
-  --line-strong: #606068;
+  --line: #2a2424;
+  --line-soft: rgba(255, 60, 50, 0.07);
+  --line-strong: #4f4545;
 
   --font-display: 'Inter', sans-serif;
   --font-ui: 'IBM Plex Mono', monospace;

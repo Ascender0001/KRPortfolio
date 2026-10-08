@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { animate } from 'animejs'
-import { prefersReducedMotion } from '../hooks/useReveal'
+import { isReducedMotion } from '../motion'
 
 const phrase =
   'OVER THE FRONTIER // KIRÁLY RÓBERT // WEB- ÉS JÁTÉKFEJLESZTÉS // SZABADKA, SZERBIA // '
@@ -10,7 +10,7 @@ export function Ticker() {
 
   useEffect(() => {
     const track = trackRef.current
-    if (!track || prefersReducedMotion()) return
+    if (!track || isReducedMotion()) return
 
     const loop = animate(track, {
       translateX: [0, '-50%'],

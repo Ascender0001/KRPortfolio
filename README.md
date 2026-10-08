@@ -23,7 +23,7 @@ npm run lint     # oxlint
 
 ## Motion
 
-Animations respect the OS `prefers-reduced-motion` setting. Append `?motion=force` to the URL to preview them anyway.
+Animations follow the OS `prefers-reduced-motion` setting: when it is on, the site uses short fades instead of the full choreography. The low-key `ANIM //` switch in the footer overrides this per visitor (auto → full → reduced), stored in `localStorage` under `kr-motion`. See `src/motion.ts`.
 
 ## Deployment
 

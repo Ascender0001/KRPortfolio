@@ -1,5 +1,39 @@
+import { useState } from 'react'
 import { useReveal } from '../hooks/useReveal'
 import { site } from '../data/portfolio'
+import { getMotionPreference, setMotionPreference } from '../motion'
+import type { MotionPreference } from '../motion'
+
+const motionCycle: MotionPreference[] = ['auto', 'full', 'reduced']
+const motionLabels: Record<MotionPreference, string> = {
+  auto: 'AUTO',
+  full: 'TELJES',
+  reduced: 'VISSZAFOGOTT',
+}
+
+// Deliberately low-key: blends into the footer status line instead of being a visible setting.
+function MotionSwitch() {
+  const [preference] = useState(getMotionPreference)
+
+  const cycle = () => {
+    const next = motionCycle[(motionCycle.indexOf(preference) + 1) % motionCycle.length]
+    setMotionPreference(next)
+    // Entrance choreography is set up on mount, so a reload is the cleanest way to apply it.
+    window.location.reload()
+  }
+
+  return (
+    <button
+      type="button"
+      className="tech-label motion-switch"
+      onClick={cycle}
+      title="Animációk váltása"
+      aria-label={`Animációk: ${motionLabels[preference].toLowerCase()} (váltás)`}
+    >
+      ANIM // {motionLabels[preference]}
+    </button>
+  )
+}
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -11,9 +45,12 @@ export function Footer() {
         <p className="tech-label">
           © {year} {site.name.toUpperCase()}
         </p>
-        <p className="tech-label">
-          <span className="status-dot" aria-hidden="true" /> SYS.ONLINE — {site.brand}//PORTFÓLIÓ
-        </p>
+        <div className="footer-meta">
+          <MotionSwitch />
+          <p className="tech-label">
+            <span className="status-dot" aria-hidden="true" /> SYS.ONLINE — {site.brand}//PORTFÓLIÓ
+          </p>
+        </div>
       </div>
     </footer>
   )

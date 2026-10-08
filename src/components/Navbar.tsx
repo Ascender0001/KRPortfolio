@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { createTimeline, utils } from 'animejs'
+import { animate, createTimeline, utils } from 'animejs'
 import { navLinks, site } from '../data/portfolio'
-import { prefersReducedMotion } from '../hooks/useReveal'
+import { isReducedMotion } from '../motion'
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -11,7 +11,15 @@ export function Navbar() {
   // Entrance: bar slides down, brand flickers in, links cascade.
   useLayoutEffect(() => {
     const header = navRef.current
-    if (!header || prefersReducedMotion()) return
+    if (!header) return
+
+    if (isReducedMotion()) {
+      utils.set(header, { opacity: 0 })
+      const fade = animate(header, { opacity: [0, 1], duration: 450, ease: 'outQuad' })
+      return () => {
+        fade.pause()
+      }
+    }
 
     const mark = header.querySelector<HTMLElement>('.brand-mark')
     const name = header.querySelector<HTMLElement>('.brand-name')

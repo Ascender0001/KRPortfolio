@@ -1,24 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { animate, utils } from 'animejs'
-
-// Explicit opt-out of the OS accessibility setting: append ?motion=force to the URL.
-if (
-  typeof window !== 'undefined' &&
-  new URLSearchParams(window.location.search).get('motion') === 'force'
-) {
-  document.documentElement.classList.add('motion-force')
-}
-
-export const prefersReducedMotion = () =>
-  typeof window !== 'undefined' &&
-  !document.documentElement.classList.contains('motion-force') &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-if (prefersReducedMotion()) {
-  console.info(
-    '[KRPortfolio] prefers-reduced-motion is active — animations are disabled. Add ?motion=force to the URL to preview with animations.',
-  )
-}
+import { isReducedMotion } from '../motion'
 
 type Cleanup = () => void
 
@@ -44,6 +26,11 @@ function observeEnter(el: Element, onEnter: () => void, threshold = 0.15): Clean
   return () => io.disconnect()
 }
 
+// Reduced-motion entrance: a short opacity fade, no movement.
+function fade(target: HTMLElement, delay = 0) {
+  animate(target, { opacity: [0, 1], duration: 450, delay, ease: 'outQuad' })
+}
+
 interface RevealOptions {
   delay?: number
   y?: number
@@ -61,7 +48,12 @@ export function useReveal<T extends HTMLElement>({
 
   useLayoutEffect(() => {
     const el = ref.current
-    if (!el || prefersReducedMotion()) return
+    if (!el) return
+
+    if (isReducedMotion()) {
+      utils.set(el, { opacity: 0 })
+      return observeEnter(el, () => fade(el, Math.min(delay, 200)), 0.12)
+    }
 
     if (x !== undefined) {
       utils.set(el, { opacity: 0, translateX: x })
@@ -120,10 +112,15 @@ export function useStaggerChildren<T extends HTMLElement>({
 
   useLayoutEffect(() => {
     const root = ref.current
-    if (!root || prefersReducedMotion()) return
+    if (!root) return
 
     const items = Array.from(root.querySelectorAll<HTMLElement>(selector))
     if (!items.length) return
+
+    if (isReducedMotion()) {
+      utils.set(items, { opacity: 0 })
+      return observeEnter(root, () => items.forEach((item, i) => fade(item, i * 40)), threshold)
+    }
 
     utils.set(items, {
       opacity: 0,

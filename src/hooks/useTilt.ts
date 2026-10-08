@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
 import { animate } from 'animejs'
-import { prefersReducedMotion } from './useReveal'
+import { isReducedMotion } from '../motion'
 
 export function useTilt<T extends HTMLElement>(max = 4) {
   const ref = useRef<T>(null)
 
   useEffect(() => {
     const el = ref.current
-    if (!el || prefersReducedMotion()) return
+    if (!el || isReducedMotion()) return
     if (!window.matchMedia('(pointer: fine)').matches) return
 
     let rafId = 0

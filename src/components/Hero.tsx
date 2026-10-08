@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { animate, createTimeline, utils } from 'animejs'
 import { channels, cvUrl, hero, site } from '../data/portfolio'
-import { prefersReducedMotion } from '../hooks/useReveal'
+import { isReducedMotion } from '../motion'
 import { SplitText } from './SplitText'
 
 export function Hero() {
@@ -10,10 +10,25 @@ export function Hero() {
   // Entrance mega-timeline: corners → topline → char cascade → scanline → copy → actions → strip.
   useLayoutEffect(() => {
     const root = rootRef.current
-    if (!root || prefersReducedMotion()) return
+    if (!root) return
 
     const query = (selector: string) =>
       Array.from(root.querySelectorAll<HTMLElement>(selector))
+
+    // Reduced motion: the same reading order, but as plain fades with no movement.
+    if (isReducedMotion()) {
+      const groups = [
+        query('.hero-frame, .hero-topline'),
+        query('.hero-title'),
+        query('.tagline, .hero-actions'),
+        query('.data-strip, .scroll-hint'),
+      ]
+      utils.set(groups.flat(), { opacity: 0 })
+      const fades = groups.map((group, i) =>
+        animate(group, { opacity: [0, 1], duration: 500, delay: 80 + i * 140, ease: 'outQuad' }),
+      )
+      return () => fades.forEach((fade) => fade.pause())
+    }
 
     const corners = query('.hero-corner')
     const topline = root.querySelector<HTMLElement>('.hero-topline')
@@ -116,7 +131,7 @@ export function Hero() {
   // Cursor parallax: glow drifts against the cursor, title leans with it.
   useEffect(() => {
     const root = rootRef.current
-    if (!root || prefersReducedMotion()) return
+    if (!root || isReducedMotion()) return
 
     const glow = root.querySelector<HTMLElement>('.hero-glow')
     const title = root.querySelector<HTMLElement>('.hero-title')
@@ -162,7 +177,7 @@ export function Hero() {
   // Ambient slow zoom on the glow field.
   useEffect(() => {
     const root = rootRef.current
-    if (!root || prefersReducedMotion()) return
+    if (!root || isReducedMotion()) return
 
     const glow = root.querySelector<HTMLElement>('.hero-glow')
     if (!glow) return

@@ -42,7 +42,7 @@ svg {
 
 ::selection {
   background: var(--accent);
-  color: var(--invert-text);
+  color: var(--on-accent);
 }
 
 :focus-visible {
@@ -68,7 +68,7 @@ svg {
   top: 1rem;
   padding: 0.7rem 1rem;
   background: var(--accent);
-  color: var(--invert-text);
+  color: var(--on-accent);
   font-family: var(--font-ui);
   font-size: 0.72rem;
   font-weight: 600;
@@ -95,7 +95,7 @@ svg {
 
 .tech-label .accent,
 .accent-text {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .tech-line {
@@ -129,8 +129,8 @@ svg {
   font-family: var(--font-ui);
   font-size: 0.7rem;
   letter-spacing: 0.18em;
-  color: var(--accent);
-  border: 1px solid var(--line-strong);
+  color: var(--accent-text);
+  border: 1px solid var(--accent);
   padding: 0.2rem 0.55rem;
 }
 
@@ -166,7 +166,7 @@ svg {
 
 .site-header.is-scrolled,
 .site-header.has-menu {
-  background: rgba(16, 16, 24, 0.82);
+  background: rgba(10, 10, 10, 0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom-color: var(--line-soft);
@@ -194,8 +194,8 @@ svg {
   min-width: 34px;
   height: 34px;
   padding: 0 0.35rem;
-  background: var(--text);
-  color: var(--invert-text);
+  background: var(--accent);
+  color: var(--on-accent);
   font-family: var(--font-ui);
   font-size: 0.78rem;
   font-weight: 600;
@@ -232,7 +232,7 @@ svg {
 
 .nav-index {
   font-size: 0.62rem;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .nav-panel a:hover {
@@ -311,7 +311,7 @@ svg {
   background: linear-gradient(
     118deg,
     transparent 0 57%,
-    rgba(255, 255, 255, 0.05) 57.1% 57.35%,
+    rgba(225, 6, 0, 0.1) 57.1% 57.35%,
     transparent 57.45%
   );
 }
@@ -325,7 +325,7 @@ svg {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.28),
+    var(--accent-glow),
     transparent
   );
 }
@@ -403,7 +403,8 @@ svg {
 .hero-title .hero-title-last {
   margin-left: clamp(1.5rem, 9vw, 7rem);
   color: transparent;
-  -webkit-text-stroke: 1px rgba(240, 240, 240, 0.85);
+  -webkit-text-stroke: 1.5px var(--accent-bright);
+  filter: drop-shadow(0 0 22px var(--accent-dim));
 }
 
 .tagline {
@@ -439,7 +440,8 @@ svg {
   transition:
     background 0.3s ease,
     color 0.3s ease,
-    border-color 0.3s ease;
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .btn-mark {
@@ -450,20 +452,22 @@ svg {
 }
 
 .btn:hover {
-  background: var(--invert-bg);
-  color: var(--invert-text);
-  border-color: var(--invert-bg);
+  background: var(--accent-dim);
+  color: var(--text);
+  border-color: var(--accent);
 }
 
 .btn-solid {
   background: var(--accent);
-  color: var(--invert-text);
+  color: var(--on-accent);
   border-color: var(--accent);
 }
 
 .btn-solid:hover {
   background: var(--accent-bright);
   border-color: var(--accent-bright);
+  color: var(--on-accent);
+  box-shadow: 0 0 28px var(--accent-glow);
 }
 
 .btn-solid .btn-mark {
@@ -611,7 +615,7 @@ svg {
   font-family: var(--font-ui);
   font-size: 0.74rem;
   letter-spacing: 0.08em;
-  color: var(--accent);
+  color: var(--accent-text);
   padding-top: 0.2rem;
 }
 
@@ -658,7 +662,7 @@ svg {
   font-family: var(--font-ui);
   font-size: 0.66rem;
   letter-spacing: 0.14em;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .module-name {
@@ -691,7 +695,8 @@ svg {
   will-change: transform;
   transition:
     border-color 0.4s ease,
-    background-color 0.4s ease;
+    background-color 0.4s ease,
+    box-shadow 0.4s ease;
 }
 
 .file-card::before {
@@ -708,7 +713,8 @@ svg {
 }
 
 .file-card:hover {
-  border-color: var(--line);
+  border-color: var(--line-strong);
+  box-shadow: 0 18px 50px -24px var(--accent-glow);
 }
 
 .file-card:hover::before {
@@ -861,12 +867,12 @@ svg {
 }
 
 .channel:hover .channel-value {
-  color: var(--accent-bright);
+  color: var(--accent-text);
 }
 
 .channel:hover .channel-arrow {
   transform: translate(4px, -4px);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ---------- Footer ---------- */
@@ -892,8 +898,27 @@ svg {
   width: 7px;
   height: 7px;
   background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
   animation: status-blink 2.4s steps(2, start) infinite;
   vertical-align: middle;
+}
+
+.footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.6rem;
+}
+
+/* Hidden-in-plain-sight animation switch: reads like part of the status line. */
+.motion-switch {
+  color: var(--steel);
+  padding: 0.3rem 0;
+  transition: color 0.3s ease;
+}
+
+.motion-switch:hover {
+  color: var(--accent-text);
 }
 
 /* ---------- Global FX: progress bar + ticker ---------- */
@@ -968,7 +993,7 @@ svg {
     align-items: stretch;
     gap: 0;
     padding: 0.6rem 1.5rem 1.2rem;
-    background: rgba(16, 16, 24, 0.97);
+    background: rgba(10, 10, 10, 0.97);
     border-bottom: 1px solid var(--line-soft);
     opacity: 0;
     transform: translateY(-8px);
@@ -1023,20 +1048,23 @@ svg {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html:not(.motion-force) {
-    scroll-behavior: auto;
-  }
+/* Reduced motion (OS setting or footer switch, see src/motion.ts): keep colour/fade
+   feedback, drop looping effects and hover movement. */
+html[data-motion='reduced'] {
+  scroll-behavior: auto;
+}
 
-  html:not(.motion-force) *,
-  html:not(.motion-force) *::before,
-  html:not(.motion-force) *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+html[data-motion='reduced'] .status-dot,
+html[data-motion='reduced'] .btn-solid .btn-mark,
+html[data-motion='reduced'] .scroll-hint-line {
+  animation: none;
+}
 
-  html:not(.motion-force) .section-heading .heading-line {
-    transform: scaleX(1);
-  }
+html[data-motion='reduced'] .module:hover,
+html[data-motion='reduced'] .channel:hover .channel-arrow {
+  transform: none;
+}
+
+html[data-motion='reduced'] .section-heading .heading-line {
+  transform: scaleX(1);
 }

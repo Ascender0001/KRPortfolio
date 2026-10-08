@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { animate } from 'animejs'
-import { prefersReducedMotion, useReveal } from '../hooks/useReveal'
+import { useReveal } from '../hooks/useReveal'
+import { isReducedMotion } from '../motion'
 
 interface Props {
   index: string
@@ -14,7 +15,7 @@ export function SectionHeading({ index, eyebrow, heading }: Props) {
 
   useLayoutEffect(() => {
     const line = lineRef.current
-    if (!line || prefersReducedMotion()) return
+    if (!line || isReducedMotion()) return
 
     let fired = false
     const io = new IntersectionObserver(
