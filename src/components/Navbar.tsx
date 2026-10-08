@@ -3,7 +3,7 @@ import { animate, createTimeline, utils } from 'animejs'
 import { navLinks, site } from '../data/portfolio'
 import { isReducedMotion } from '../motion'
 import { tapTrigger } from '../bankai'
-import { HollowMask } from './HollowMask'
+import { LogoSword } from './LogoSword'
 
 // Five quick taps on the logo trigger Bankai on phones (no keyboard to type it).
 const onLogoTap = tapTrigger()
@@ -100,7 +100,7 @@ export function Navbar() {
         <a className="brand" href="#hero" aria-label="Király Róbert kezdőlap" onClick={onLogoTap}>
           <span className="brand-mark">
             <span className="brand-mark-text">{site.brand}</span>
-            <HollowMask />
+            <LogoSword />
           </span>
           <span className="brand-name">{site.name}</span>
         </a>

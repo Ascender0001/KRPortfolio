@@ -3,8 +3,8 @@ import { createTimeline } from 'animejs'
 import { onBankai } from '../bankai'
 import { isReducedMotion } from '../motion'
 
-// The transformation itself: a red flash, BANKAI slamming in out of a blur, and a short
-// shudder of the page. Releasing Bankai shows a small toast instead.
+// The transformation itself: a red flash, BANKAI slamming in, and a short shudder.
+// Only opacity and transform are animated so it stays on the GPU and never janks. Releasing Bankai shows a small toast instead.
 export function BankaiOverlay() {
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -35,9 +35,8 @@ export function BankaiOverlay() {
             pick('.bankai-title'),
             {
               opacity: [0, 1, 1, 0],
-              scale: gentle ? [1, 1, 1, 1] : [2.8, 1, 1, 1.06],
-              filter: ['blur(20px)', 'blur(0px)', 'blur(0px)', 'blur(8px)'],
-              duration: 2700,
+              scale: gentle ? [1, 1, 1, 1] : [2.4, 1, 1, 1.05],
+              duration: 2500,
             },
             120,
           )
@@ -48,15 +47,15 @@ export function BankaiOverlay() {
           )
 
         if (!gentle) {
-          document.querySelector('main')?.animate(
+          pick('.bankai-title').animate(
             [
-              { transform: 'translate(0, 0)' },
-              { transform: 'translate(-6px, 3px)' },
-              { transform: 'translate(5px, -4px)' },
-              { transform: 'translate(-3px, 2px)' },
-              { transform: 'translate(0, 0)' },
+              { translate: '0 0' },
+              { translate: '-8px 4px' },
+              { translate: '7px -5px' },
+              { translate: '-4px 2px' },
+              { translate: '0 0' },
             ],
-            { duration: 420, delay: 180, easing: 'ease-out' },
+            { duration: 420, delay: 260, easing: 'ease-out' },
           )
         }
       }),

@@ -69,11 +69,11 @@ const vertexShader = /* glsl */ `
 
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = uSize * uPixelRatio * (0.55 + aSeed * 0.9) * (1.0 + between * 0.6 * uScatter) * (1.0 + uBankai * 0.45) / -mv.z;
+    gl_PointSize = uSize * uPixelRatio * (0.55 + aSeed * 0.9) * (1.0 + between * 0.6 * uScatter) * (1.0 + uBankai * 0.15) / -mv.z;
 
     vColor = aColor;
     float twinkle = mix(0.85, 0.65 + 0.35 * sin(uTime * 1.7 + aSeed * 40.0), uTwinkle);
-    vAlpha = uOpacity * twinkle * (1.0 + uBankai * 0.5);
+    vAlpha = uOpacity * twinkle * (1.0 + uBankai * 0.3);
   }
 `
 

@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react'
 import { isBankai, onBankai } from '../bankai'
 import { isReducedMotion } from '../motion'
 
-// Spiritual-pressure ("reiatsu") aura: red embers rise from the cursor and flare up when the
-// page is scrolled fast. In Bankai mode it burns harder, with dark smoke between the embers,
-// and the transformation sends a wall of it up from the bottom of the screen.
+// Spiritual-pressure ("reiatsu") aura in black and red: dark smoke and red embers rise from
+// the cursor and flare up when the page is scrolled fast. In Bankai mode it burns harder, and
+// the transformation sends a wall of it up from the bottom of the screen.
 
 interface Particle {
   x: number
@@ -15,10 +15,11 @@ interface Particle {
   max: number
   size: number
   seed: number
-  kind: 'ember' | 'hot' | 'smoke'
+  kind: 'ember' | 'core' | 'smoke'
 }
 
-const MAX_PARTICLES = 700
+// Kept modest: every particle is a sprite draw, and the burst must not stall the frame.
+const MAX_PARTICLES = 320
 
 function sprite(inner: string, outer: string) {
   const size = 64
@@ -45,9 +46,9 @@ export function Reiatsu() {
     const gentle = isReducedMotion()
     const finePointer = window.matchMedia('(pointer: fine)').matches
     const sprites = {
-      ember: sprite('rgba(255,90,60,1)', 'rgba(225,6,0,0.55)'),
-      hot: sprite('rgba(255,225,210,1)', 'rgba(255,60,30,0.6)'),
-      smoke: sprite('rgba(10,0,0,0.9)', 'rgba(25,0,0,0.5)'),
+      ember: sprite('rgba(255,40,25,1)', 'rgba(200,0,0,0.55)'),
+      core: sprite('rgba(255,70,45,1)', 'rgba(255,20,10,0.6)'),
+      smoke: sprite('rgba(0,0,0,0.95)', 'rgba(30,0,0,0.6)'),
     }
     const particles: Particle[] = []
     let width = 0
@@ -59,7 +60,7 @@ export function Reiatsu() {
     let lastScroll = window.scrollY
 
     const resize = () => {
-      const ratio = Math.min(window.devicePixelRatio, 2)
+      const ratio = Math.min(window.devicePixelRatio, 1.25)
       width = window.innerWidth
       height = window.innerHeight
       canvas.width = width * ratio
@@ -80,7 +81,7 @@ export function Reiatsu() {
           max: 34 + Math.random() * 40,
           size: (3 + Math.random() * 6) * scale * (bankai ? 1.35 : 1),
           seed: Math.random() * 10,
-          kind: bankai && roll < 0.35 ? 'smoke' : roll > 0.85 ? 'hot' : 'ember',
+          kind: roll < (bankai ? 0.5 : 0.4) ? 'smoke' : roll > 0.88 ? 'core' : 'ember',
         })
       }
       if (!frame) frame = requestAnimationFrame(draw)
@@ -91,7 +92,7 @@ export function Reiatsu() {
       ctx.clearRect(0, 0, width, height)
 
       if (performance.now() < burstUntil) {
-        for (let i = 0; i < (gentle ? 6 : 16); i++) {
+        for (let i = 0; i < (gentle ? 3 : 7); i++) {
           spawn(Math.random() * width, height + 20, 1, 30, 6 + Math.random() * 7, 2.2)
         }
       }
@@ -142,7 +143,7 @@ export function Reiatsu() {
 
     const offBankai = onBankai((on) => {
       if (on) {
-        burstUntil = performance.now() + (gentle ? 900 : 1700)
+        burstUntil = performance.now() + (gentle ? 800 : 1400)
         if (!frame) frame = requestAnimationFrame(draw)
       }
     })

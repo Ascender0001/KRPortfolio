@@ -2,7 +2,7 @@
 //
 // Type "bankai" anywhere (or tap the KR logo five times quickly) to transform the site:
 // the transformation plays (BankaiOverlay), the particle field forms a sword and turns
-// black-and-red, the cursor aura intensifies and the logo keeps its hollow mask.
+// black-and-red, the cursor aura intensifies and the logo keeps its sword.
 // Typing it again releases it. State lives on html[data-bankai] for CSS, plus a tiny
 // subscription API for the canvas/WebGL parts.
 
