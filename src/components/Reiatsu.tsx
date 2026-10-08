@@ -1,10 +1,9 @@
 import { useEffect, useRef } from 'react'
-import { isBankai, onBankai } from '../bankai'
+import { isBankai } from '../bankai'
 import { isReducedMotion } from '../motion'
 
 // Spiritual-pressure ("reiatsu") aura in black and red: dark smoke and red embers rise from
-// the cursor and flare up when the page is scrolled fast. In Bankai mode it burns harder, and
-// the transformation sends a wall of it up from the bottom of the screen.
+// the cursor and flare up when the page is scrolled fast. In Bankai mode it is a little denser.
 
 interface Particle {
   x: number
@@ -18,7 +17,7 @@ interface Particle {
   kind: 'ember' | 'core' | 'smoke'
 }
 
-// Kept modest: every particle is a sprite draw, and the burst must not stall the frame.
+// Kept modest: every particle is a sprite draw on a full-screen canvas.
 const MAX_PARTICLES = 320
 
 function sprite(inner: string, outer: string) {
@@ -54,7 +53,6 @@ export function Reiatsu() {
     let width = 0
     let height = 0
     let frame = 0
-    let burstUntil = 0
     let moves = 0
     let pointer: { x: number; y: number } | null = null
     let lastScroll = window.scrollY
@@ -79,7 +77,7 @@ export function Reiatsu() {
           vy: -(0.5 + Math.random() * 1.4) * lift,
           life: 0,
           max: 34 + Math.random() * 40,
-          size: (3 + Math.random() * 6) * scale * (bankai ? 1.35 : 1),
+          size: (3 + Math.random() * 6) * scale,
           seed: Math.random() * 10,
           kind: roll < (bankai ? 0.5 : 0.4) ? 'smoke' : roll > 0.88 ? 'core' : 'ember',
         })
@@ -90,12 +88,6 @@ export function Reiatsu() {
     const draw = () => {
       frame = 0
       ctx.clearRect(0, 0, width, height)
-
-      if (performance.now() < burstUntil) {
-        for (let i = 0; i < (gentle ? 2 : 5); i++) {
-          spawn(Math.random() * width, height + 20, 1, 30, 6 + Math.random() * 7, 1.5)
-        }
-      }
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i]
@@ -123,14 +115,14 @@ export function Reiatsu() {
       ctx.globalAlpha = 1
       ctx.globalCompositeOperation = 'source-over'
 
-      if (particles.length || performance.now() < burstUntil) frame = requestAnimationFrame(draw)
+      if (particles.length) frame = requestAnimationFrame(draw)
     }
 
     const onPointer = (event: PointerEvent) => {
       pointer = { x: event.clientX, y: event.clientY }
       moves++
       if (gentle && moves % 3) return
-      spawn(event.clientX, event.clientY, isBankai() ? 3 : 1, 10, 1)
+      spawn(event.clientX, event.clientY, isBankai() ? 2 : 1, 10, 1)
     }
 
     // Scrolling fast flares the aura around the cursor, like a surge of spiritual pressure.
@@ -141,19 +133,11 @@ export function Reiatsu() {
       spawn(pointer.x, pointer.y, Math.min(14, Math.round(delta / 22)) * (isBankai() ? 2 : 1), 34, 2.2, 1.3)
     }
 
-    const offBankai = onBankai((on) => {
-      if (on) {
-        burstUntil = performance.now() + (gentle ? 800 : 1400)
-        if (!frame) frame = requestAnimationFrame(draw)
-      }
-    })
-
     resize()
     window.addEventListener('resize', resize)
     window.addEventListener('scroll', onScroll, { passive: true })
     if (finePointer) window.addEventListener('pointermove', onPointer, { passive: true })
     return () => {
-      offBankai()
       cancelAnimationFrame(frame)
       window.removeEventListener('resize', resize)
       window.removeEventListener('scroll', onScroll)

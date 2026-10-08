@@ -945,10 +945,6 @@ html[data-bankai] .brand-mark::after {
 }
 
 /* Bankai mode: everything burns a little hotter. */
-html[data-bankai] {
-  --accent-glow: rgba(255, 30, 20, 0.75);
-}
-
 html[data-bankai] body::before {
   background: radial-gradient(ellipse at 50% 40%, transparent 35%, rgba(70, 0, 0, 0.6) 100%);
 }
