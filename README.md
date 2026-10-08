@@ -17,13 +17,14 @@ npm run lint     # oxlint
 
 - `src/data/portfolio.ts` — all site content (text, projects, skills, contact channels). Edit this to update the page.
 - `src/components/` — page sections (Hero, About, Skills, Projects, Contact, …).
-- `src/hooks/` — motion helpers (`useReveal`, `useStaggerChildren`, `useTilt`).
+- `src/scroll/engine.ts` — the scroll engine: pinned sections whose animations are scrubbed by (smoothed) scroll position, with each section handing off to the next.
+- `src/hooks/` — one-shot reveal helpers used in reduced-motion mode.
 - `src/styles/` — design tokens, global styles and animations.
 - `public/` — static files served as-is (favicon, CV, robots.txt, sitemap).
 
 ## Motion
 
-Animations follow the OS `prefers-reduced-motion` setting: when it is on, the site uses short fades instead of the full choreography. The low-key `ANIM //` switch in the footer overrides this per visitor (auto → full → reduced), stored in `localStorage` under `kr-motion`. See `src/motion.ts`.
+The full experience is one continuous scroll-driven animation (see `src/scroll/engine.ts`). Animations follow the OS `prefers-reduced-motion` setting: when it is on, the site becomes a normal page with short fades. The low-key `ANIM //` switch in the footer overrides this per visitor (auto → full → reduced), stored in `localStorage` under `kr-motion`. See `src/motion.ts`.
 
 ## Deployment
 

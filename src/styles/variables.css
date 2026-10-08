@@ -31,6 +31,7 @@
 
   --font-display: 'Inter', sans-serif;
   --font-ui: 'IBM Plex Mono', monospace;
+  --font-title: 'Oswald', 'Inter', sans-serif;
 
   --content-width: 1180px;
   --header-height: 72px;

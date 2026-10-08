@@ -32,6 +32,8 @@ function fade(target: HTMLElement, delay = 0) {
 }
 
 interface RevealOptions {
+  // 'reduced': only animate in reduced mode (a scroll scene owns the element otherwise).
+  when?: 'always' | 'reduced'
   delay?: number
   y?: number
   x?: number
@@ -43,12 +45,13 @@ export function useReveal<T extends HTMLElement>({
   y = 30,
   x,
   duration = 950,
+  when = 'always',
 }: RevealOptions = {}) {
   const ref = useRef<T>(null)
 
   useLayoutEffect(() => {
     const el = ref.current
-    if (!el) return
+    if (!el || (when === 'reduced' && !isReducedMotion())) return
 
     if (isReducedMotion()) {
       utils.set(el, { opacity: 0 })
@@ -84,6 +87,7 @@ export function useReveal<T extends HTMLElement>({
 }
 
 interface StaggerChildrenOptions {
+  when?: 'always' | 'reduced'
   selector: string
   mode?: 'sequence' | 'grid'
   y?: number
@@ -107,12 +111,13 @@ export function useStaggerChildren<T extends HTMLElement>({
   baseDelay = 0,
   threshold = 0.15,
   duration = 800,
+  when = 'always',
 }: StaggerChildrenOptions) {
   const ref = useRef<T>(null)
 
   useLayoutEffect(() => {
     const root = ref.current
-    if (!root) return
+    if (!root || (when === 'reduced' && !isReducedMotion())) return
 
     const items = Array.from(root.querySelectorAll<HTMLElement>(selector))
     if (!items.length) return

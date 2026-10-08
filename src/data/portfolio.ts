@@ -27,6 +27,7 @@ export const hero = {
     'Informatika szakos hallgató, aki modern webalkalmazásokkal és játékfejlesztéssel szeretne valódi értéket építeni.',
   intro:
     'A technológia világában már középiskolás éveim óta folyamatosan bővítem a tudásomat, és olyan projektekben szeretek dolgozni, ahol a design, a funkcionalitás és a gyakorlati megoldások együtt jelennek meg.',
+  cue: 'Görgess',
 }
 
 export const cvUrl = '/kiraly_robert_cv.pdf'

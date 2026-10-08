@@ -1,28 +1,52 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect } from 'react'
+import type { CSSProperties } from 'react'
 import { animate, createTimeline, utils } from 'animejs'
-import { channels, cvUrl, hero, site } from '../data/portfolio'
+import { cvUrl, hero, site } from '../data/portfolio'
 import { isReducedMotion } from '../motion'
+import { easeInOut, lerp, range, useScene } from '../scroll/engine'
 import { SplitText } from './SplitText'
 
 export function Hero() {
-  const rootRef = useRef<HTMLElement>(null)
+  // Scroll: the title splits and pushes toward the viewer, the grid floor glides underneath.
+  const rootRef = useScene<HTMLElement>((root) => {
+    const pick = (selector: string) => root.querySelector<HTMLElement>(selector)!
+    const title = pick('.hero-title')
+    const lineA = pick('[data-line="1"]')
+    const lineB = pick('[data-line="2"]')
+    const topline = pick('.hero-topline')
+    const meta = pick('.hero-meta')
+    const cue = pick('.scroll-cue')
+    const floor = pick('.hero-floor')
+    const glow = pick('.hero-glow')
 
-  // Entrance mega-timeline: corners → topline → char cascade → scanline → copy → actions → strip.
+    return ({ p }) => {
+      const push = easeInOut(range(p, 0, 1))
+      title.style.transform = `scale(${lerp(1, 1.9, push)})`
+      title.style.opacity = String(1 - range(p, 0.35, 0.95))
+      lineA.style.transform = `translateX(${-push * 18}vw)`
+      lineB.style.transform = `translateX(${push * 18}vw)`
+
+      const away = easeInOut(range(p, 0, 0.45))
+      meta.style.opacity = String(1 - away)
+      meta.style.transform = `translateY(${-away * 80}px)`
+      topline.style.opacity = String(1 - range(p, 0, 0.3))
+      topline.style.transform = `translateY(${-range(p, 0, 0.3) * 40}px)`
+      cue.style.opacity = String(1 - range(p, 0, 0.12))
+
+      floor.style.backgroundPosition = `0 ${p * 900}px`
+      glow.style.transform = `scale(${1 + p * 0.8})`
+    }
+  })
+
+  // Load: title cascade out of blur → red light sweep → tagline and controls.
   useLayoutEffect(() => {
     const root = rootRef.current
     if (!root) return
 
-    const query = (selector: string) =>
-      Array.from(root.querySelectorAll<HTMLElement>(selector))
+    const query = (selector: string) => Array.from(root.querySelectorAll<HTMLElement>(selector))
 
-    // Reduced motion: the same reading order, but as plain fades with no movement.
     if (isReducedMotion()) {
-      const groups = [
-        query('.hero-frame, .hero-topline'),
-        query('.hero-title'),
-        query('.tagline, .hero-actions'),
-        query('.data-strip, .scroll-hint'),
-      ]
+      const groups = [query('.hero-topline'), query('.hero-title'), query('.hero-meta')]
       utils.set(groups.flat(), { opacity: 0 })
       const fades = groups.map((group, i) =>
         animate(group, { opacity: [0, 1], duration: 500, delay: 80 + i * 140, ease: 'outQuad' }),
@@ -30,242 +54,99 @@ export function Hero() {
       return () => fades.forEach((fade) => fade.pause())
     }
 
-    const corners = query('.hero-corner')
-    const topline = root.querySelector<HTMLElement>('.hero-topline')
-    const charsA = query('[data-line="1"] .split-char')
-    const charsB = query('[data-line="2"] .split-char')
-    const tagline = root.querySelector<HTMLElement>('.tagline')
-    const buttons = query('.hero-actions .btn')
-    const stripItems = query('.strip-item')
-    const hint = root.querySelector<HTMLElement>('.scroll-hint')
-    const scanline = root.querySelector<HTMLElement>('.hero-scanline')
+    const chars = query('.split-char')
+    const beam = query('.hero-beam')
+    const late = [
+      ...query('.hero-topline p'),
+      ...query('.tagline'),
+      ...query('.hero-actions .btn'),
+      ...query('.scroll-cue'),
+    ]
 
-    const all = [
-      ...corners,
-      topline,
-      ...charsA,
-      ...charsB,
-      tagline,
-      ...buttons,
-      ...stripItems,
-      hint,
-    ].filter((el): el is HTMLElement => Boolean(el))
-
-    if (!all.length) return
-
-    utils.set(all, { opacity: 0 })
+    utils.set([...chars, ...late], { opacity: 0 })
 
     const timeline = createTimeline({ defaults: { ease: 'outQuart' } })
-
-    corners.forEach((corner, i) => {
+    chars.forEach((char, i) => {
       timeline.add(
-        corner,
-        { opacity: [0, 1], scale: [0, 1], duration: 380, ease: 'outCubic' },
-        80 + i * 70,
+        char,
+        {
+          opacity: [0, 1],
+          translateY: [60, 0],
+          filter: ['blur(14px)', 'blur(0px)'],
+          duration: 900,
+          ease: 'outExpo',
+        },
+        150 + i * 45,
       )
     })
-
-    if (topline) {
-      timeline.add(
-        topline,
-        { opacity: [0, 1], translateY: [-16, 0], duration: 550 },
-        220,
-      )
-    }
-
-    const cascade = (chars: HTMLElement[], start: number) =>
-      chars.forEach((char, i) => {
-        timeline.add(
-          char,
-          {
-            opacity: [0, 1],
-            translateY: [46, 0],
-            rotateX: [-75, 0],
-            duration: 620,
-            ease: 'outCubic',
-          },
-          start + i * 26,
-        )
-      })
-
-    cascade(charsA, 430)
-    cascade(charsB, 760)
-
-    if (scanline) {
-      timeline.add(
-        scanline,
-        { top: ['-14%', '114%'], duration: 950, ease: 'inOutQuad' },
-        1180,
-      )
-    }
-
-    if (tagline) {
-      timeline.add(tagline, { opacity: [0, 1], translateY: [24, 0], duration: 600 }, 1420)
-    }
-
-    buttons.forEach((button, i) => {
-      timeline.add(
-        button,
-        { opacity: [0, 1], translateY: [18, 0], duration: 520 },
-        1560 + i * 80,
-      )
+    timeline.add(beam, { left: ['-40%', '120%'], opacity: [0, 1, 0], duration: 1100, ease: 'inOutQuad' }, 500)
+    late.forEach((el, i) => {
+      timeline.add(el, { opacity: [0, 1], translateY: [24, 0], duration: 700 }, 800 + i * 90)
     })
-
-    stripItems.forEach((item, i) => {
-      timeline.add(
-        item,
-        { opacity: [0, 1], translateY: [20, 0], duration: 520 },
-        1760 + i * 95,
-      )
-    })
-
-    if (hint) {
-      timeline.add(hint, { opacity: [0, 1], duration: 600 }, 2150)
-    }
 
     return () => {
       timeline.pause()
     }
-  }, [])
-
-  // Cursor parallax: glow drifts against the cursor, title leans with it.
-  useEffect(() => {
-    const root = rootRef.current
-    if (!root || isReducedMotion()) return
-
-    const glow = root.querySelector<HTMLElement>('.hero-glow')
-    const title = root.querySelector<HTMLElement>('.hero-title')
-    let rafId = 0
-    let lastRun = 0
-
-    const onMove = (event: MouseEvent) => {
-      const now = performance.now()
-      if (now - lastRun < 32) return
-      lastRun = now
-
-      const nx = event.clientX / window.innerWidth - 0.5
-      const ny = event.clientY / window.innerHeight - 0.5
-
-      cancelAnimationFrame(rafId)
-      rafId = requestAnimationFrame(() => {
-        if (glow) {
-          animate(glow, {
-            translateX: nx * -34,
-            translateY: ny * -34,
-            duration: 900,
-            ease: 'outQuad',
-          })
-        }
-        if (title) {
-          animate(title, {
-            translateX: nx * 10,
-            translateY: ny * 8,
-            duration: 700,
-            ease: 'outQuad',
-          })
-        }
-      })
-    }
-
-    root.addEventListener('mousemove', onMove)
-    return () => {
-      root.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(rafId)
-    }
-  }, [])
-
-  // Ambient slow zoom on the glow field.
-  useEffect(() => {
-    const root = rootRef.current
-    if (!root || isReducedMotion()) return
-
-    const glow = root.querySelector<HTMLElement>('.hero-glow')
-    if (!glow) return
-
-    const zoom = animate(glow, {
-      scale: [1, 1.14],
-      duration: 24000,
-      ease: 'inOutSine',
-      loop: true,
-      alternate: true,
-    })
-
-    return () => {
-      zoom.pause()
-    }
-  }, [])
+  }, [rootRef])
 
   return (
-    <section className="hero" id="hero" ref={rootRef}>
-      <div className="hero-bg" aria-hidden="true">
-        <i className="hero-glow" />
-        <i className="hero-slash" />
-        <i className="hero-scanline" />
-      </div>
-      <div className="hero-frame" aria-hidden="true">
-        <i className="hero-corner hero-corner-tl" />
-        <i className="hero-corner hero-corner-tr" />
-        <i className="hero-corner hero-corner-bl" />
-        <i className="hero-corner hero-corner-br" />
-      </div>
-
-      <div className="hero-topline">
-        <p className="tech-label">
-          <span className="accent">// </span>
-          {hero.eyebrow}
-        </p>
-        <p className="tech-label">
-          {site.location.toUpperCase()} — {site.coordinates}
-        </p>
-      </div>
-
-      <h1 className="hero-title">
-        <span className="sr-only">{site.name}</span>
-        <span className="hero-title-line" data-line="1">
-          <SplitText text={hero.firstName} />
-        </span>
-        <span className="hero-title-line hero-title-last" data-line="2">
-          <SplitText text={hero.lastName} />
-        </span>
-      </h1>
-
-      <p className="tagline">{hero.tagline}</p>
-
-      <div className="hero-actions">
-        <a className="btn btn-solid" href="#projects">
-          <span className="btn-mark" aria-hidden="true" />
-          Projektek megtekintése
-        </a>
-        <a className="btn" href="#contact">
-          Kapcsolat
-        </a>
-        <a className="btn" href={cvUrl} download>
-          CV letöltése
-        </a>
-      </div>
-
-      <dl className="data-strip">
-        <div className="strip-item">
-          <dt>TEL</dt>
-          <dd>
-            <a href={channels[1].href}>{channels[1].value}</a>
-          </dd>
+    <section
+      className="scene scene-hero"
+      id="hero"
+      style={{ '--scene-length': '190vh' } as CSSProperties}
+      ref={rootRef}
+    >
+      <div className="scene-stage hero-stage">
+        <div className="hero-bg" aria-hidden="true">
+          <i className="hero-glow" />
+          <i className="hero-floor" />
+          <i className="hero-beam" />
         </div>
-        <div className="strip-item">
-          <dt>MAIL</dt>
-          <dd>
-            <a href={channels[0].href}>{channels[0].value}</a>
-          </dd>
-        </div>
-        <div className="strip-item">
-          <dt>FOKUSZ</dt>
-          <dd>Web / React / Python</dd>
-        </div>
-      </dl>
 
-      <div className="scroll-hint" aria-hidden="true">
-        <span>Scroll</span>
-        <i className="scroll-hint-line" />
+
+        <div className="scene-inner hero-content">
+          <div className="hero-topline">
+            <p className="tech-label">
+              <span className="accent">// </span>
+              {hero.eyebrow}
+            </p>
+            <p className="tech-label">
+              {site.location.toUpperCase()} — {site.coordinates}
+            </p>
+          </div>
+
+          <h1 className="hero-title">
+            <span className="sr-only">{site.name}</span>
+            <span className="hero-title-line" data-line="1">
+              <SplitText text={hero.firstName} />
+            </span>
+            <span className="hero-title-line hero-title-last" data-line="2">
+              <SplitText text={hero.lastName} />
+            </span>
+          </h1>
+
+          <div className="hero-meta">
+            <p className="tagline">{hero.tagline}</p>
+            <div className="hero-actions">
+              <a className="btn btn-solid" href="#projects">
+                <span className="btn-mark" aria-hidden="true" />
+                Projektek megtekintése
+              </a>
+              <a className="btn" href="#contact">
+                Kapcsolat
+              </a>
+              <a className="btn" href={cvUrl} download>
+                CV letöltése
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+        <div className="scroll-cue" aria-hidden="true">
+          <span>{hero.cue}</span>
+          <i className="scroll-cue-line" />
+        </div>
       </div>
     </section>
   )

@@ -1,7 +1,4 @@
-import { useLayoutEffect, useRef } from 'react'
-import { animate } from 'animejs'
 import { useReveal } from '../hooks/useReveal'
-import { isReducedMotion } from '../motion'
 
 interface Props {
   index: string
@@ -9,34 +6,9 @@ interface Props {
   heading: string
 }
 
+// In full motion the owning scene scrubs this in with revealHeading(); in reduced mode it fades.
 export function SectionHeading({ index, eyebrow, heading }: Props) {
-  const ref = useReveal<HTMLDivElement>()
-  const lineRef = useRef<HTMLElement>(null)
-
-  useLayoutEffect(() => {
-    const line = lineRef.current
-    if (!line || isReducedMotion()) return
-
-    let fired = false
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting || fired) return
-          fired = true
-          io.disconnect()
-          animate(line, {
-            scaleX: [0, 1],
-            duration: 1100,
-            delay: 250,
-            ease: 'outCubic',
-          })
-        })
-      },
-      { threshold: 0.3 },
-    )
-    io.observe(line)
-    return () => io.disconnect()
-  }, [])
+  const ref = useReveal<HTMLDivElement>({ when: 'reduced' })
 
   return (
     <div className="section-heading" ref={ref}>
@@ -48,7 +20,7 @@ export function SectionHeading({ index, eyebrow, heading }: Props) {
         </p>
       </div>
       <h2>{heading}</h2>
-      <i className="heading-line" aria-hidden="true" ref={lineRef} />
+      <i className="heading-line" aria-hidden="true" />
     </div>
   )
 }
