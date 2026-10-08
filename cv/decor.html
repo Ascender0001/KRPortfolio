@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Top-right glow + particle sphere of the CV, rendered once to decor.png by build.mjs.
+         A single image keeps the PDF light: 900 translucent vector dots make PDF viewers lag. -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 130mm;
+        height: 110mm;
+        overflow: hidden;
+        background: #070707;
+      }
+
+      body {
+        position: relative;
+      }
+
+      /* Positions are the page positions minus this image's offset (left 80mm, top 0). */
+      .glow {
+        position: absolute;
+        left: 25mm;
+        top: -40mm;
+        width: 150mm;
+        height: 150mm;
+        background: radial-gradient(circle, rgba(225, 6, 0, 0.22), transparent 65%);
+      }
+
+      #sphere {
+        position: absolute;
+        left: 40mm;
+        top: -26mm;
+        width: 122mm;
+        height: 122mm;
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glow"></div>
+    <svg id="sphere" viewBox="-1.15 -1.15 2.3 2.3"></svg>
+    <script>
+      // Still version of the site's particle sphere: Fibonacci points, rotated and projected.
+      const svg = document.getElementById('sphere')
+      const n = 900
+      const tilt = 0.45
+      const spin = 0.9
+      let seed = 3
+      const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647
+      let markup = ''
+      for (let i = 0; i < n; i++) {
+        const y0 = 1 - (i / (n - 1)) * 2
+        const r = Math.sqrt(1 - y0 * y0)
+        const t = i * Math.PI * (3 - Math.sqrt(5))
+        const x = Math.cos(t) * r
+        const z = Math.sin(t) * r
+        const x1 = x * Math.cos(spin) + z * Math.sin(spin)
+        const z1 = -x * Math.sin(spin) + z * Math.cos(spin)
+        const y1 = y0 * Math.cos(tilt) - z1 * Math.sin(tilt)
+        const z2 = y0 * Math.sin(tilt) + z1 * Math.cos(tilt)
+        const depth = (z2 + 1) / 2
+        const size = 0.006 + depth * 0.011 + rand() * 0.004
+        const roll = rand()
+        const color = roll < 0.12 ? '#ffece8' : roll < 0.4 ? '#ff4d2e' : '#e10600'
+        const alpha = (0.15 + depth * 0.75).toFixed(2)
+        markup += `<circle cx="${x1.toFixed(3)}" cy="${y1.toFixed(3)}" r="${size.toFixed(4)}" fill="${color}" opacity="${alpha}"/>`
+      }
+      svg.innerHTML = markup
+    </script>
+  </body>
+</html>

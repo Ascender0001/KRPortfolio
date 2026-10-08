@@ -68,23 +68,13 @@
         flex-direction: column;
       }
 
-      /* Red glow + particle sphere: the site's 3D motif, as a still. */
-      .glow {
+      /* Glow + particle sphere (the site's 3D motif) as one pre-rendered image; see decor.html. */
+      .decor {
         position: absolute;
-        top: -40mm;
-        right: -45mm;
-        width: 150mm;
-        height: 150mm;
-        background: radial-gradient(circle, rgba(225, 6, 0, 0.22), transparent 65%);
-      }
-
-      #sphere {
-        position: absolute;
-        top: -26mm;
-        right: -32mm;
-        width: 122mm;
-        height: 122mm;
-        opacity: 0.85;
+        top: 0;
+        left: 80mm;
+        width: 130mm;
+        height: 110mm;
       }
 
       /* ---------- Header ---------- */
@@ -127,7 +117,6 @@
       h1 .last {
         display: block;
         color: var(--accent-bright);
-        text-shadow: 0 0 18pt rgba(255, 30, 20, 0.45);
       }
 
       .contacts {
@@ -166,7 +155,6 @@
         border-radius: 50%;
         padding: 1mm;
         background: conic-gradient(from 200deg, var(--accent-bright), #7a0300, var(--accent-bright));
-        box-shadow: 0 0 14mm rgba(255, 30, 20, 0.35);
       }
 
       .photo img {
@@ -307,8 +295,7 @@
   </head>
   <body>
     <main class="page">
-      <div class="glow"></div>
-      <svg id="sphere" viewBox="-1.15 -1.15 2.3 2.3" aria-hidden="true"></svg>
+      <img class="decor" src="decor.png" alt="" />
 
       <header>
         <div>
@@ -414,34 +401,5 @@
       </footer>
     </main>
 
-    <script>
-      // Still version of the site's particle sphere: Fibonacci points, rotated and projected.
-      const svg = document.getElementById('sphere')
-      const n = 900
-      const tilt = 0.45
-      const spin = 0.9
-      let seed = 3
-      const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
-      let markup = ''
-      for (let i = 0; i < n; i++) {
-        const y0 = 1 - (i / (n - 1)) * 2
-        const r = Math.sqrt(1 - y0 * y0)
-        const t = i * Math.PI * (3 - Math.sqrt(5))
-        let x = Math.cos(t) * r
-        let z = Math.sin(t) * r
-        // rotate around Y then X
-        const x1 = x * Math.cos(spin) + z * Math.sin(spin)
-        const z1 = -x * Math.sin(spin) + z * Math.cos(spin)
-        const y1 = y0 * Math.cos(tilt) - z1 * Math.sin(tilt)
-        const z2 = y0 * Math.sin(tilt) + z1 * Math.cos(tilt)
-        const depth = (z2 + 1) / 2
-        const size = 0.006 + depth * 0.011 + rand() * 0.004
-        const roll = rand()
-        const color = roll < 0.12 ? '#ffece8' : roll < 0.4 ? '#ff4d2e' : '#e10600'
-        const alpha = (0.15 + depth * 0.75).toFixed(2)
-        markup += `<circle cx="${x1.toFixed(3)}" cy="${y1.toFixed(3)}" r="${size.toFixed(4)}" fill="${color}" opacity="${alpha}"/>`
-      }
-      svg.innerHTML = markup
-    </script>
   </body>
 </html>

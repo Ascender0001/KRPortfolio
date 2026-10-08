@@ -20,11 +20,23 @@ const candidates = [
 const chrome = candidates.find((path) => existsSync(path))
 if (!chrome) throw new Error('Chrome not found; set CHROME to its path.')
 
+const headless = ['--headless=new', '--disable-gpu', '--hide-scrollbars']
+
+// 1. The particle sphere as a single 3x image (130 × 110 mm ≈ 492 × 416 CSS px).
 execFileSync(chrome, [
-  '--headless=new',
-  '--disable-gpu',
+  ...headless,
+  '--window-size=492,416',
+  '--force-device-scale-factor=3',
+  '--virtual-time-budget=3000',
+  `--screenshot=${resolve(here, 'decor.png')}`,
+  pathToFileURL(resolve(here, 'decor.html')).href,
+])
+
+// 2. The page itself.
+execFileSync(chrome, [
+  ...headless,
   '--no-pdf-header-footer',
-  '--virtual-time-budget=10000', // let Google Fonts and the sphere script finish
+  '--virtual-time-budget=10000', // let Google Fonts load
   `--print-to-pdf=${output}`,
   pathToFileURL(resolve(here, 'cv.html')).href,
 ])
