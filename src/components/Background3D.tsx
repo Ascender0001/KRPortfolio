@@ -22,7 +22,9 @@ function run(canvas: HTMLCanvasElement, Field: FieldClass) {
   const narrow = () => window.innerWidth < 900
   let field: ParticleField
   try {
-    field = new Field(canvas, narrow() ? 4500 : 9000)
+    // Phones and tablets: fewer particles at a lower resolution, drawn slightly bigger.
+    const lite = narrow() || window.matchMedia('(pointer: coarse)').matches
+    field = new Field(canvas, lite ? 3000 : 9000, lite ? { maxPixelRatio: 1.25, pointSize: 36 } : {})
   } catch {
     // No WebGL: the page works fine without the backdrop.
     canvas.hidden = true

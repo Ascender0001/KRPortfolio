@@ -1020,6 +1020,46 @@ html[data-bankai] .brand-mark {
   }
 }
 
+/* ---------- Touch devices: cheaper to draw ---------- */
+
+/* Elements moved every frame while scrolling get their own GPU layer. */
+html[data-motion='full'] .hero-inner,
+html[data-motion='full'] .hero-line,
+html[data-motion='full'] [data-reveal] {
+  will-change: transform, opacity;
+}
+
+@media (hover: none) {
+  /* Backdrop blur over a live WebGL canvas is one of the costliest effects on phones. */
+  .btn-ghost,
+  .site-header.is-scrolled,
+  .site-header.has-menu,
+  .nav-panel,
+  .project-card {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .btn-ghost {
+    background: #151212;
+  }
+
+  .site-header.is-scrolled,
+  .site-header.has-menu {
+    background: rgba(7, 7, 7, 0.94);
+  }
+
+  .project-card {
+    background:
+      radial-gradient(420px circle at var(--mx) var(--my), rgba(255, 40, 30, 0.12), transparent 60%),
+      #110d0d;
+  }
+
+  .hero-line-accent {
+    text-shadow: 0 0 28px rgba(255, 30, 20, 0.4);
+  }
+}
+
 /* ---------- Reduced motion (OS setting or footer switch, see src/motion.ts) ---------- */
 
 html[data-motion='reduced'] {

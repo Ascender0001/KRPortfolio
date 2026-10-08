@@ -121,8 +121,12 @@ export class ParticleField {
 
   private canvas: HTMLCanvasElement
 
-  constructor(canvas: HTMLCanvasElement, count: number) {
+  private maxPixelRatio: number
+
+  /** Phones pass a lower maxPixelRatio and a larger pointSize: fewer pixels, same look. */
+  constructor(canvas: HTMLCanvasElement, count: number, { maxPixelRatio = 1.75, pointSize = 30 } = {}) {
     this.canvas = canvas
+    this.maxPixelRatio = maxPixelRatio
     this.renderer = new WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: 'high-performance' })
     this.renderer.setClearColor(0x000000, 0)
 
@@ -143,7 +147,7 @@ export class ParticleField {
       uniforms: {
         uTime: { value: 0 },
         uProgress: { value: 0 },
-        uSize: { value: 30 },
+        uSize: { value: pointSize },
         uPixelRatio: { value: 1 },
         uOpacity: { value: 0 },
         uScatter: { value: 1 },
@@ -184,7 +188,7 @@ export class ParticleField {
   resize() {
     const width = this.canvas.clientWidth
     const height = this.canvas.clientHeight
-    const ratio = Math.min(window.devicePixelRatio, 1.75)
+    const ratio = Math.min(window.devicePixelRatio, this.maxPixelRatio)
     this.renderer.setPixelRatio(ratio)
     this.renderer.setSize(width, height, false)
     this.camera.aspect = width / Math.max(1, height)

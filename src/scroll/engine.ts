@@ -29,7 +29,8 @@ interface Scene {
 }
 
 const scenes = new Set<Scene>()
-const SMOOTHING = 0.12
+// Touch scrolling already has native momentum; heavy smoothing there feels like lag.
+const SMOOTHING = window.matchMedia('(pointer: coarse)').matches ? 0.3 : 0.12
 let smoothY = 0
 let frame = 0
 let listening = false
