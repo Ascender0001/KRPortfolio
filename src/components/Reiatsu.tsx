@@ -92,8 +92,8 @@ export function Reiatsu() {
       ctx.clearRect(0, 0, width, height)
 
       if (performance.now() < burstUntil) {
-        for (let i = 0; i < (gentle ? 3 : 7); i++) {
-          spawn(Math.random() * width, height + 20, 1, 30, 6 + Math.random() * 7, 2.2)
+        for (let i = 0; i < (gentle ? 2 : 5); i++) {
+          spawn(Math.random() * width, height + 20, 1, 30, 6 + Math.random() * 7, 1.5)
         }
       }
 

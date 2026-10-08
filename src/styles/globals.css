@@ -898,6 +898,8 @@ html[data-bankai] .brand-mark::after {
   inset: 0;
   opacity: 0;
   background: radial-gradient(circle at 50% 55%, rgba(255, 40, 25, 0.85), rgba(60, 0, 0, 0.9) 45%, #000 80%);
+  /* Own GPU layer: fading it must not repaint a full-screen gradient every frame. */
+  will-change: opacity;
 }
 
 .bankai-title {
@@ -909,10 +911,9 @@ html[data-bankai] .brand-mark::after {
   letter-spacing: -0.03em;
   text-transform: uppercase;
   color: #0a0a0a;
-  text-shadow:
-    0 0 2px rgba(255, 60, 40, 1),
-    0 0 24px rgba(255, 30, 20, 0.9),
-    0 0 56px rgba(255, 30, 20, 0.55);
+  /* Glow comes from the flash behind it; big blurred text-shadows are too costly to paint. */
+  text-shadow: 0 0 3px rgba(255, 60, 40, 1);
+  -webkit-text-stroke: 1px rgba(255, 60, 40, 0.9);
   opacity: 0;
   will-change: transform, opacity;
 }
@@ -928,6 +929,7 @@ html[data-bankai] .brand-mark::after {
   letter-spacing: 0.7em;
   color: var(--text);
   opacity: 0;
+  will-change: opacity;
 }
 
 .bankai-toast {
@@ -949,12 +951,6 @@ html[data-bankai] {
 
 html[data-bankai] body::before {
   background: radial-gradient(ellipse at 50% 40%, transparent 35%, rgba(70, 0, 0, 0.6) 100%);
-}
-
-html[data-bankai] .hero-line-accent {
-  text-shadow:
-    0 0 40px rgba(255, 30, 20, 0.8),
-    0 0 100px rgba(255, 30, 20, 0.45);
 }
 
 html[data-bankai] .brand-mark {
