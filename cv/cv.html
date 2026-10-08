@@ -178,85 +178,44 @@
         border: 0.8mm solid var(--bg);
       }
 
-      /* ---------- Body ---------- */
+      /* ---------- Body: deliberately plain ---------- */
 
       .lead {
         position: relative;
-        margin-top: 7mm;
-        padding: 4mm 6mm;
-        border-left: 0.8mm solid var(--accent);
-        background: linear-gradient(90deg, rgba(225, 6, 0, 0.1), transparent 85%);
-        font-family: var(--display);
-        font-size: 11.2pt;
-        font-weight: 500;
-        line-height: 1.45;
-        letter-spacing: -0.005em;
+        margin-top: 10mm;
+        max-width: 138mm;
+        font-size: 10.4pt;
+        line-height: 1.6;
+        color: var(--muted);
       }
 
       .columns {
         position: relative;
         display: grid;
-        grid-template-columns: 1.55fr 1fr;
-        gap: 9mm;
-        margin-top: 7mm;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 12mm;
+        margin-top: 10mm;
         flex: 1;
       }
 
       section + section {
-        margin-top: 6mm;
+        margin-top: 9mm;
       }
 
       h2 {
-        display: flex;
-        align-items: baseline;
-        gap: 2.5mm;
+        padding-bottom: 2mm;
+        margin-bottom: 4.5mm;
+        border-bottom: 0.25mm solid var(--line);
         font-family: var(--display);
-        font-size: 13pt;
-        font-weight: 700;
-        letter-spacing: -0.01em;
-        margin-bottom: 3.5mm;
-      }
-
-      h2 .num {
-        font-size: 8pt;
+        font-size: 9pt;
         font-weight: 600;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
         color: var(--accent-text);
       }
 
-      h2::after {
-        content: '';
-        flex: 1;
-        height: 0.25mm;
-        align-self: center;
-        background: linear-gradient(90deg, var(--line), transparent);
-      }
-
-      .entry {
-        position: relative;
-        padding: 0 0 4.5mm 5mm;
-        border-left: 0.3mm solid var(--line);
-      }
-
-      .entry:last-child {
-        padding-bottom: 0;
-      }
-
-      .entry::before {
-        content: '';
-        position: absolute;
-        left: -1.15mm;
-        top: 1.5mm;
-        width: 2mm;
-        height: 2mm;
-        border-radius: 50%;
-        background: var(--bg);
-        border: 0.45mm solid var(--accent-bright);
-      }
-
-      .entry.current::before {
-        background: var(--accent-bright);
-        box-shadow: 0 0 0 1mm rgba(255, 42, 31, 0.2);
+      .entry + .entry {
+        margin-top: 5mm;
       }
 
       .entry-head {
@@ -275,115 +234,51 @@
 
       .when {
         flex-shrink: 0;
-        font-size: 8.2pt;
-        font-weight: 600;
+        font-size: 8.4pt;
+        color: var(--faint);
+      }
+
+      .when.now {
         color: var(--accent-text);
+        font-weight: 600;
       }
 
       .role {
-        margin-top: 0.4mm;
-        font-weight: 500;
-        color: var(--text);
+        margin-top: 0.3mm;
       }
 
       .desc {
-        margin-top: 1mm;
+        margin-top: 0.8mm;
         color: var(--muted);
       }
 
-      .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.3mm;
-        margin-top: 2mm;
-      }
-
-      .tag {
-        padding: 0.5mm 2.4mm;
-        border-radius: 99mm;
-        background: rgba(255, 255, 255, 0.07);
-        font-size: 7.6pt;
-        font-weight: 500;
-      }
-
-      .badge {
-        display: inline-block;
-        margin-left: 1.5mm;
-        padding: 0.3mm 2mm;
-        border-radius: 99mm;
-        background: rgba(225, 6, 0, 0.2);
-        border: 0.25mm solid rgba(255, 60, 50, 0.45);
-        font-family: var(--body);
-        font-size: 7pt;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        vertical-align: 1.2pt;
-      }
-
-      /* Side column */
-
-      .side {
-        padding: 5mm 5.5mm;
-        border: 0.25mm solid var(--line);
-        border-radius: 5mm;
-        background: rgba(20, 16, 16, 0.7);
-        align-self: start;
+      .tech {
+        margin-top: 1mm;
+        font-size: 8.4pt;
+        color: var(--faint);
       }
 
       .edu li + li {
-        margin-top: 3.5mm;
-      }
-
-      .edu .period {
-        font-size: 8pt;
-        font-weight: 700;
-        color: var(--accent-text);
+        margin-top: 4.5mm;
       }
 
       .edu .school {
-        margin-top: 0.4mm;
         font-weight: 600;
         line-height: 1.35;
       }
 
       .edu .field {
         color: var(--muted);
-        font-size: 8.6pt;
+      }
+
+      .edu .period {
+        font-size: 8.4pt;
+        color: var(--faint);
       }
 
       .skills li {
-        display: flex;
-        align-items: baseline;
-        gap: 3mm;
-        padding: 1.15mm 0;
-        border-bottom: 0.25mm solid var(--line);
-      }
-
-      .skills li:last-child {
-        border-bottom: none;
-      }
-
-      .skills .n {
-        font-family: var(--display);
-        font-size: 7.4pt;
-        font-weight: 600;
-        color: var(--accent-text);
-      }
-
-      .skills .name {
-        font-family: var(--display);
-        font-size: 10.6pt;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-      }
-
-      .skills .note {
-        display: block;
-        font-family: var(--body);
-        font-size: 7.6pt;
-        font-weight: 400;
-        color: var(--faint);
-        letter-spacing: 0;
+        padding: 1.4mm 0;
+        font-weight: 500;
       }
 
       /* ---------- Footer ---------- */
@@ -438,11 +333,11 @@
       <div class="columns">
         <div class="main">
           <section>
-            <h2><span class="num">01</span>Tapasztalat</h2>
-            <div class="entry current">
+            <h2>Tapasztalat</h2>
+            <div class="entry">
               <div class="entry-head">
-                <h3>Studio Present <span class="badge">JELENLEG</span></h3>
-                <span class="when">2026 –</span>
+                <h3>Studio Present</h3>
+                <span class="when now">2026 – jelenleg</span>
               </div>
               <p class="role">Front-End Gyakornok</p>
               <p class="desc">Korábban 2 hetes front-end gyakorlat ugyanitt (2023).</p>
@@ -457,76 +352,57 @@
           </section>
 
           <section>
-            <h2><span class="num">02</span>Projektek</h2>
+            <h2>Projektek</h2>
             <div class="entry">
-              <div class="entry-head">
-                <h3>Fret Trainer</h3>
-                <span class="when">Játék</span>
-              </div>
+              <h3>Fret Trainer</h3>
               <p class="desc">
                 Rocksmith-stílusú gitártanuló játék, amely mikrofonon keresztül valós időben felismeri a
                 lejátszott hangokat és akkordokat.
               </p>
-              <div class="tags">
-                <span class="tag">JavaScript</span><span class="tag">Web Audio API</span><span class="tag">SVG</span>
-              </div>
+              <p class="tech">JavaScript · Web Audio API · SVG</p>
             </div>
             <div class="entry">
-              <div class="entry-head">
-                <h3>Mepper-Pill</h3>
-                <span class="when">Web</span>
-              </div>
+              <h3>Mepper-Pill</h3>
               <p class="desc">
                 Minimalista, underground stílusú ételfutár alkalmazás, amelyet jelenleg Palicson használnak.
               </p>
-              <div class="tags">
-                <span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Vite</span
-                ><span class="tag">Supabase</span>
-              </div>
+              <p class="tech">React · TypeScript · Vite · Supabase</p>
             </div>
             <div class="entry">
-              <div class="entry-head">
-                <h3>ascender.codes</h3>
-                <span class="when">Portfólió</span>
-              </div>
-              <p class="desc">
-                Személyes portfólió interaktív, görgetésre alakot váltó 3D részecske-háttérrel.
-              </p>
-              <div class="tags">
-                <span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">three.js</span
-                ><span class="tag">WebGL</span>
-              </div>
+              <h3>ascender.codes</h3>
+              <p class="desc">Személyes portfólió interaktív 3D részecske-háttérrel.</p>
+              <p class="tech">React · TypeScript · three.js</p>
             </div>
           </section>
         </div>
 
-        <aside class="side">
+        <aside>
           <section>
-            <h2><span class="num">03</span>Tanulmányok</h2>
+            <h2>Tanulmányok</h2>
             <ul class="edu">
               <li>
-                <p class="period">2023 –</p>
                 <p class="school">Szabadkai Műszaki Szakfőiskola</p>
                 <p class="field">Informatika</p>
+                <p class="period">2023 –</p>
               </li>
               <li>
-                <p class="period">2019 – 2023</p>
                 <p class="school">Ivan Sarić Műszaki Iskola</p>
                 <p class="field">Információs technológiák elektrotechnikusa</p>
+                <p class="period">2019 – 2023</p>
               </li>
             </ul>
           </section>
 
           <section>
-            <h2><span class="num">04</span>Technológiák</h2>
+            <h2>Technológiák</h2>
             <ul class="skills">
-              <li><span class="n">01</span><span class="name">HTML / CSS<span class="note">Reszponzív, letisztult felületek</span></span></li>
-              <li><span class="n">02</span><span class="name">JavaScript<span class="note">Interaktív webes logika</span></span></li>
-              <li><span class="n">03</span><span class="name">React / React Native<span class="note">Web- és mobilappok</span></span></li>
-              <li><span class="n">04</span><span class="name">Python<span class="note">Szkriptek és automatizálás</span></span></li>
-              <li><span class="n">05</span><span class="name">C / C#<span class="note">Programozási alapok, játékfejlesztés</span></span></li>
-              <li><span class="n">06</span><span class="name">SQL<span class="note">Adatbázisok és lekérdezések</span></span></li>
-              <li><span class="n">07</span><span class="name">Expo<span class="note">Mobilalkalmazások</span></span></li>
+              <li>HTML / CSS</li>
+              <li>JavaScript</li>
+              <li>React / React Native</li>
+              <li>Python</li>
+              <li>C / C#</li>
+              <li>SQL</li>
+              <li>Expo</li>
             </ul>
           </section>
         </aside>
