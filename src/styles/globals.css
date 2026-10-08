@@ -769,32 +769,176 @@ main,
 /* ---------- Footer ---------- */
 
 .site-footer {
+  overflow: hidden;
   border-top: 1px solid var(--line);
-  background: rgba(7, 7, 7, 0.7);
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 120%, rgba(225, 6, 0, 0.18), transparent 70%),
+    rgba(7, 7, 7, 0.88);
+}
+
+/* Thin red rule fading in from the centre of the top edge. */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
 }
 
 .footer-inner {
   width: min(calc(100% - 3rem), var(--content-width));
   margin: 0 auto;
-  padding: 1.6rem 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.8rem;
+  padding: clamp(3.5rem, 8vw, 5.5rem) 0 1.4rem;
 }
 
-.footer-text,
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+}
+
+.footer-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Same mark as the nav logo and favicon. */
+.footer-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding-bottom: 5px;
+  background: #0a0a0a;
+  border: 1px solid var(--line-strong);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.footer-mark::after {
+  content: '';
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 7px;
+  height: 2px;
+  background: var(--accent);
+}
+
+.footer-tagline {
+  max-width: 22rem;
+  margin: 1rem 0 1.4rem;
+  color: var(--muted);
+}
+
+.footer-heading {
+  margin-bottom: 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.footer-col li + li {
+  margin-top: 0.35rem;
+}
+
+.footer-link {
+  display: inline-block;
+  padding: 0.3rem 0;
+  color: var(--muted);
+  background: linear-gradient(var(--accent-bright), var(--accent-bright)) 0 100% / 0 1px no-repeat;
+  transition:
+    color 0.25s ease,
+    background-size 0.35s var(--ease);
+}
+
+.footer-link:hover {
+  color: var(--text);
+  background-size: 100% 1px;
+}
+
+.footer-clock {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.footer-small,
 .motion-switch {
   font-size: 0.85rem;
   color: var(--faint);
 }
 
-.footer-meta {
+.footer-col .footer-small {
+  margin-top: 0.4rem;
+}
+
+.to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.4rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.to-top span {
+  transition: transform 0.3s var(--ease);
+}
+
+.to-top:hover {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.to-top:hover span {
+  transform: translateY(-3px);
+}
+
+/* Oversized outlined name across the bottom, partly cut off by the footer edge. */
+.footer-wordmark {
+  margin: clamp(2.5rem, 6vw, 4rem) 0 -0.12em;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 13.5vw, 12.5rem);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.13);
+  user-select: none;
+}
+
+.footer-bottom {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
   gap: 0.6rem 1.6rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
 }
 
 /* Low-key on purpose: reads like footer small print. */
@@ -806,6 +950,22 @@ main,
 
 .motion-switch:hover {
   color: var(--accent-text);
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- Scroll progress ---------- */
