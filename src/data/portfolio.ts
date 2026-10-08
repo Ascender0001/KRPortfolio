@@ -95,9 +95,10 @@ export interface ProjectFile {
 export const projects: ProjectFile[] = [
   {
     kind: 'Projekt',
-    title: 'DnD-Site',
-    description: 'Modern webalkalmazás D&D 5e karakterek létrehozásához és kezeléséhez.',
-    tags: ['Vite', 'Supabase'],
+    title: 'Fret Trainer',
+    description:
+      'Rocksmith-stílusú gitártanuló játék, amely mikrofonon keresztül valós időben felismeri a lejátszott hangokat és akkordokat.',
+    tags: ['JavaScript', 'Web Audio API', 'SVG'],
   },
   {
     kind: 'Projekt',
