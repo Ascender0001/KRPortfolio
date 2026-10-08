@@ -17,6 +17,8 @@ const vertexShader = /* glsl */ `
   uniform float uSize;
   uniform float uPixelRatio;
   uniform float uOpacity;
+  uniform float uScatter;
+  uniform float uTwinkle;
 
   attribute vec3 aShape1;
   attribute vec3 aShape2;
@@ -49,7 +51,7 @@ const vertexShader = /* glsl */ `
 
     // Burst apart halfway between two shapes, re-form on arrival.
     float between = 4.0 * max(max(w0 * w1, w1 * w2), max(w2 * w3, w3 * w4));
-    p += aScatter * between * 1.7;
+    p += aScatter * between * 1.7 * uScatter;
 
     // Gentle drift so the cloud never sits perfectly still.
     p += vec3(
@@ -60,10 +62,10 @@ const vertexShader = /* glsl */ `
 
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = uSize * uPixelRatio * (0.55 + aSeed * 0.9) * (1.0 + between * 0.6) / -mv.z;
+    gl_PointSize = uSize * uPixelRatio * (0.55 + aSeed * 0.9) * (1.0 + between * 0.6 * uScatter) / -mv.z;
 
     vColor = aColor;
-    float twinkle = 0.65 + 0.35 * sin(uTime * 1.7 + aSeed * 40.0);
+    float twinkle = mix(0.85, 0.65 + 0.35 * sin(uTime * 1.7 + aSeed * 40.0), uTwinkle);
     vAlpha = uOpacity * twinkle;
   }
 `
@@ -131,6 +133,8 @@ export class ParticleField {
         uSize: { value: 30 },
         uPixelRatio: { value: 1 },
         uOpacity: { value: 0 },
+        uScatter: { value: 1 },
+        uTwinkle: { value: 1 },
       },
     })
 
@@ -163,29 +167,33 @@ export class ParticleField {
     this.material.uniforms.uPixelRatio.value = ratio
   }
 
-  /** Animated: eases toward the target and keeps the cloud alive. */
-  play() {
+  /**
+   * Eases toward the target every frame and keeps the cloud alive.
+   * gentle (reduced motion): shapes still change with scroll, but slowly and without the
+   * burst between shapes, twinkling, or pointer tilt.
+   */
+  play({ gentle = false } = {}) {
+    const u = this.material.uniforms
+    u.uScatter.value = gentle ? 0 : 1
+    u.uTwinkle.value = gentle ? 0 : 1
+    const rate = gentle ? 0.04 : 0.06
+    const timeScale = gentle ? 0.35 : 1
+    const pointerScale = gentle ? 0 : 1
     const loop = () => {
       this.frame = requestAnimationFrame(loop)
-      this.step(0.06)
+      this.step(rate, timeScale, pointerScale)
     }
     loop()
   }
 
-  /** Reduced motion: jump straight to the target and draw one still frame. */
-  still() {
-    this.current = { ...this.target }
-    this.step(0, false)
-  }
-
-  private step(rate: number, animate = true) {
-    const time = animate ? (performance.now() - this.start) / 1000 : 0
+  private step(rate: number, timeScale: number, pointerScale: number) {
+    const time = ((performance.now() - this.start) / 1000) * timeScale
     const c = this.current
-    c.progress = approach(c.progress, this.target.progress, rate || 1)
-    c.offsetX = approach(c.offsetX, this.target.offsetX, rate || 1)
-    c.opacity = approach(c.opacity, this.target.opacity, rate ? rate * 0.6 : 1)
-    this.pointer.sx = approach(this.pointer.sx, this.pointer.x, 0.05)
-    this.pointer.sy = approach(this.pointer.sy, this.pointer.y, 0.05)
+    c.progress = approach(c.progress, this.target.progress, rate)
+    c.offsetX = approach(c.offsetX, this.target.offsetX, rate)
+    c.opacity = approach(c.opacity, this.target.opacity, rate * 0.6)
+    this.pointer.sx = approach(this.pointer.sx, this.pointer.x * pointerScale, 0.05)
+    this.pointer.sy = approach(this.pointer.sy, this.pointer.y * pointerScale, 0.05)
 
     const u = this.material.uniforms
     u.uTime.value = time

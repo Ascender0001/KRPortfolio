@@ -56,26 +56,15 @@ function run(canvas: HTMLCanvasElement, Field: FieldClass) {
   const onResize = () => {
     field.resize()
     update()
-    if (isReducedMotion()) field.still()
-  }
-
-  update()
-
-  if (isReducedMotion()) {
-    // Still picture: the current shape, no morphing or drifting.
-    field.still()
-    window.addEventListener('resize', onResize)
-    return () => {
-      window.removeEventListener('resize', onResize)
-      field.dispose()
-    }
   }
 
   const onPointer = (event: PointerEvent) => {
     field.setPointer(event.clientX / window.innerWidth - 0.5, event.clientY / window.innerHeight - 0.5)
   }
 
-  field.play()
+  update()
+  // Reduced motion still follows the scroll from shape to shape, just calmly (see play()).
+  field.play({ gentle: isReducedMotion() })
   window.addEventListener('scroll', update, { passive: true })
   window.addEventListener('resize', onResize)
   window.addEventListener('pointermove', onPointer, { passive: true })

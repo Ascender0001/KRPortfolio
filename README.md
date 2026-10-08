@@ -25,7 +25,7 @@ npm run lint     # oxlint
 
 ## Motion
 
-Animations follow the OS `prefers-reduced-motion` setting: when it is on, the particle field is a still image and text uses short fades. The low-key "Animációk" switch in the footer overrides this per visitor (auto → full → reduced), stored in `localStorage` under `kr-motion`. See `src/motion.ts`.
+Animations follow the OS `prefers-reduced-motion` setting: when it is on, the particle field still changes shape with scroll but calmly (no bursts, twinkle or pointer tilt) and text uses short fades. The low-key "Animációk" switch in the footer overrides this per visitor (auto → full → reduced), stored in `localStorage` under `kr-motion`. See `src/motion.ts`.
 
 ## Deployment
 
