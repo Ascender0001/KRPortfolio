@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="hu">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Király Róbert — Önéletrajz</title>
+    <!-- Source of public/kiraly_robert_cv.pdf. Regenerate with: node cv/build.mjs -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=block"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #070707;
+        --panel: #0f0d0d;
+        --accent: #e10600;
+        --accent-bright: #ff2a1f;
+        --accent-text: #ff4a3d;
+        --text: #f4f1f1;
+        --muted: #aaa2a2;
+        --faint: #6f6767;
+        --line: rgba(255, 255, 255, 0.1);
+        --display: 'Space Grotesk', 'Inter', sans-serif;
+        --body: 'Inter', sans-serif;
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 210mm;
+        height: 297mm;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--body);
+        font-size: 9.6pt;
+        line-height: 1.5;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      .page {
+        position: relative;
+        width: 210mm;
+        height: 297mm;
+        overflow: hidden;
+        padding: 13mm 15mm 10mm;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Red glow + particle sphere: the site's 3D motif, as a still. */
+      .glow {
+        position: absolute;
+        top: -40mm;
+        right: -45mm;
+        width: 150mm;
+        height: 150mm;
+        background: radial-gradient(circle, rgba(225, 6, 0, 0.22), transparent 65%);
+      }
+
+      #sphere {
+        position: absolute;
+        top: -26mm;
+        right: -32mm;
+        width: 122mm;
+        height: 122mm;
+        opacity: 0.85;
+      }
+
+      /* ---------- Header ---------- */
+
+      header {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: end;
+        gap: 8mm;
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 2.2mm;
+        font-size: 8.6pt;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+
+      .dot {
+        width: 2.2mm;
+        height: 2.2mm;
+        border-radius: 50%;
+        background: var(--accent-bright);
+        box-shadow: 0 0 0 1.2mm rgba(255, 42, 31, 0.18);
+      }
+
+      h1 {
+        margin-top: 4mm;
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: 44pt;
+        line-height: 0.92;
+        letter-spacing: -0.025em;
+      }
+
+      h1 .last {
+        display: block;
+        color: var(--accent-bright);
+        text-shadow: 0 0 18pt rgba(255, 30, 20, 0.45);
+      }
+
+      .contacts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2mm;
+        margin-top: 5mm;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 1.8mm;
+        padding: 1.4mm 3.4mm;
+        border: 0.25mm solid rgba(255, 255, 255, 0.18);
+        border-radius: 99mm;
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 8.4pt;
+        font-weight: 500;
+      }
+
+      .pill b {
+        font-weight: 600;
+        color: var(--accent-text);
+      }
+
+      .pill-accent {
+        border-color: rgba(255, 60, 50, 0.45);
+        background: rgba(225, 6, 0, 0.16);
+      }
+
+      .photo {
+        position: relative;
+        width: 38mm;
+        height: 38mm;
+        border-radius: 50%;
+        padding: 1mm;
+        background: conic-gradient(from 200deg, var(--accent-bright), #7a0300, var(--accent-bright));
+        box-shadow: 0 0 14mm rgba(255, 30, 20, 0.35);
+      }
+
+      .photo img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 0.8mm solid var(--bg);
+      }
+
+      /* ---------- Body ---------- */
+
+      .lead {
+        position: relative;
+        margin-top: 7mm;
+        padding: 4mm 6mm;
+        border-left: 0.8mm solid var(--accent);
+        background: linear-gradient(90deg, rgba(225, 6, 0, 0.1), transparent 85%);
+        font-family: var(--display);
+        font-size: 11.2pt;
+        font-weight: 500;
+        line-height: 1.45;
+        letter-spacing: -0.005em;
+      }
+
+      .columns {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.55fr 1fr;
+        gap: 9mm;
+        margin-top: 7mm;
+        flex: 1;
+      }
+
+      section + section {
+        margin-top: 6mm;
+      }
+
+      h2 {
+        display: flex;
+        align-items: baseline;
+        gap: 2.5mm;
+        font-family: var(--display);
+        font-size: 13pt;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        margin-bottom: 3.5mm;
+      }
+
+      h2 .num {
+        font-size: 8pt;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        color: var(--accent-text);
+      }
+
+      h2::after {
+        content: '';
+        flex: 1;
+        height: 0.25mm;
+        align-self: center;
+        background: linear-gradient(90deg, var(--line), transparent);
+      }
+
+      .entry {
+        position: relative;
+        padding: 0 0 4.5mm 5mm;
+        border-left: 0.3mm solid var(--line);
+      }
+
+      .entry:last-child {
+        padding-bottom: 0;
+      }
+
+      .entry::before {
+        content: '';
+        position: absolute;
+        left: -1.15mm;
+        top: 1.5mm;
+        width: 2mm;
+        height: 2mm;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 0.45mm solid var(--accent-bright);
+      }
+
+      .entry.current::before {
+        background: var(--accent-bright);
+        box-shadow: 0 0 0 1mm rgba(255, 42, 31, 0.2);
+      }
+
+      .entry-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 4mm;
+      }
+
+      .entry h3 {
+        font-family: var(--display);
+        font-size: 11pt;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      .when {
+        flex-shrink: 0;
+        font-size: 8.2pt;
+        font-weight: 600;
+        color: var(--accent-text);
+      }
+
+      .role {
+        margin-top: 0.4mm;
+        font-weight: 500;
+        color: var(--text);
+      }
+
+      .desc {
+        margin-top: 1mm;
+        color: var(--muted);
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.3mm;
+        margin-top: 2mm;
+      }
+
+      .tag {
+        padding: 0.5mm 2.4mm;
+        border-radius: 99mm;
+        background: rgba(255, 255, 255, 0.07);
+        font-size: 7.6pt;
+        font-weight: 500;
+      }
+
+      .badge {
+        display: inline-block;
+        margin-left: 1.5mm;
+        padding: 0.3mm 2mm;
+        border-radius: 99mm;
+        background: rgba(225, 6, 0, 0.2);
+        border: 0.25mm solid rgba(255, 60, 50, 0.45);
+        font-family: var(--body);
+        font-size: 7pt;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        vertical-align: 1.2pt;
+      }
+
+      /* Side column */
+
+      .side {
+        padding: 5mm 5.5mm;
+        border: 0.25mm solid var(--line);
+        border-radius: 5mm;
+        background: rgba(20, 16, 16, 0.7);
+        align-self: start;
+      }
+
+      .edu li + li {
+        margin-top: 3.5mm;
+      }
+
+      .edu .period {
+        font-size: 8pt;
+        font-weight: 700;
+        color: var(--accent-text);
+      }
+
+      .edu .school {
+        margin-top: 0.4mm;
+        font-weight: 600;
+        line-height: 1.35;
+      }
+
+      .edu .field {
+        color: var(--muted);
+        font-size: 8.6pt;
+      }
+
+      .skills li {
+        display: flex;
+        align-items: baseline;
+        gap: 3mm;
+        padding: 1.15mm 0;
+        border-bottom: 0.25mm solid var(--line);
+      }
+
+      .skills li:last-child {
+        border-bottom: none;
+      }
+
+      .skills .n {
+        font-family: var(--display);
+        font-size: 7.4pt;
+        font-weight: 600;
+        color: var(--accent-text);
+      }
+
+      .skills .name {
+        font-family: var(--display);
+        font-size: 10.6pt;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      .skills .note {
+        display: block;
+        font-family: var(--body);
+        font-size: 7.6pt;
+        font-weight: 400;
+        color: var(--faint);
+        letter-spacing: 0;
+      }
+
+      /* ---------- Footer ---------- */
+
+      footer {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 4mm;
+        margin-top: 5mm;
+        border-top: 0.25mm solid var(--line);
+        font-size: 8pt;
+        color: var(--faint);
+      }
+
+      footer a {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      footer a span {
+        color: var(--accent-text);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="glow"></div>
+      <svg id="sphere" viewBox="-1.15 -1.15 2.3 2.3" aria-hidden="true"></svg>
+
+      <header>
+        <div>
+          <p class="eyebrow"><span class="dot"></span>Web- és játékfejlesztés · Szabadka, Szerbia</p>
+          <h1>Király <span class="last">Róbert</span></h1>
+          <div class="contacts">
+            <a class="pill" href="tel:+38163395603"><b>Tel</b> +381 63 395 603</a>
+            <a class="pill" href="mailto:kiralyrobert2004@gmail.com"><b>E-mail</b> kiralyrobert2004@gmail.com</a>
+            <a class="pill pill-accent" href="https://ascender.codes/"><b>Web</b> ascender.codes</a>
+          </div>
+        </div>
+        <div class="photo"><img src="photo.jpg" alt="Király Róbert" /></div>
+      </header>
+
+      <p class="lead">
+        Informatika szakos hallgató vagyok a Szabadkai Műszaki Szakfőiskolán, aki szenvedélyesen érdeklődik
+        a web- és játékfejlesztés iránt. Már középiskolás éveim óta a technológia világában építem a
+        tudásomat, és folyamatosan keresem azokat a kihívásokat, ahol valódi projekteken keresztül
+        fejlődhetek.
+      </p>
+
+      <div class="columns">
+        <div class="main">
+          <section>
+            <h2><span class="num">01</span>Tapasztalat</h2>
+            <div class="entry current">
+              <div class="entry-head">
+                <h3>Studio Present <span class="badge">JELENLEG</span></h3>
+                <span class="when">2026 –</span>
+              </div>
+              <p class="role">Front-End Gyakornok</p>
+              <p class="desc">Korábban 2 hetes front-end gyakorlat ugyanitt (2023).</p>
+            </div>
+            <div class="entry">
+              <div class="entry-head">
+                <h3>Mustard Seed Credo Limited Company</h3>
+                <span class="when">2025 · 2 hónap</span>
+              </div>
+              <p class="role">Code Analytics</p>
+            </div>
+          </section>
+
+          <section>
+            <h2><span class="num">02</span>Projektek</h2>
+            <div class="entry">
+              <div class="entry-head">
+                <h3>Fret Trainer</h3>
+                <span class="when">Játék</span>
+              </div>
+              <p class="desc">
+                Rocksmith-stílusú gitártanuló játék, amely mikrofonon keresztül valós időben felismeri a
+                lejátszott hangokat és akkordokat.
+              </p>
+              <div class="tags">
+                <span class="tag">JavaScript</span><span class="tag">Web Audio API</span><span class="tag">SVG</span>
+              </div>
+            </div>
+            <div class="entry">
+              <div class="entry-head">
+                <h3>Mepper-Pill</h3>
+                <span class="when">Web</span>
+              </div>
+              <p class="desc">
+                Minimalista, underground stílusú ételfutár alkalmazás, amelyet jelenleg Palicson használnak.
+              </p>
+              <div class="tags">
+                <span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Vite</span
+                ><span class="tag">Supabase</span>
+              </div>
+            </div>
+            <div class="entry">
+              <div class="entry-head">
+                <h3>ascender.codes</h3>
+                <span class="when">Portfólió</span>
+              </div>
+              <p class="desc">
+                Személyes portfólió interaktív, görgetésre alakot váltó 3D részecske-háttérrel.
+              </p>
+              <div class="tags">
+                <span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">three.js</span
+                ><span class="tag">WebGL</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="side">
+          <section>
+            <h2><span class="num">03</span>Tanulmányok</h2>
+            <ul class="edu">
+              <li>
+                <p class="period">2023 –</p>
+                <p class="school">Szabadkai Műszaki Szakfőiskola</p>
+                <p class="field">Informatika</p>
+              </li>
+              <li>
+                <p class="period">2019 – 2023</p>
+                <p class="school">Ivan Sarić Műszaki Iskola</p>
+                <p class="field">Információs technológiák elektrotechnikusa</p>
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2><span class="num">04</span>Technológiák</h2>
+            <ul class="skills">
+              <li><span class="n">01</span><span class="name">HTML / CSS<span class="note">Reszponzív, letisztult felületek</span></span></li>
+              <li><span class="n">02</span><span class="name">JavaScript<span class="note">Interaktív webes logika</span></span></li>
+              <li><span class="n">03</span><span class="name">React / React Native<span class="note">Web- és mobilappok</span></span></li>
+              <li><span class="n">04</span><span class="name">Python<span class="note">Szkriptek és automatizálás</span></span></li>
+              <li><span class="n">05</span><span class="name">C / C#<span class="note">Programozási alapok, játékfejlesztés</span></span></li>
+              <li><span class="n">06</span><span class="name">SQL<span class="note">Adatbázisok és lekérdezések</span></span></li>
+              <li><span class="n">07</span><span class="name">Expo<span class="note">Mobilalkalmazások</span></span></li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+
+      <footer>
+        <span>Király Róbert · Önéletrajz · 2026</span>
+        <a href="https://ascender.codes/">Interaktív portfólió → <span>ascender.codes</span></a>
+      </footer>
+    </main>
+
+    <script>
+      // Still version of the site's particle sphere: Fibonacci points, rotated and projected.
+      const svg = document.getElementById('sphere')
+      const n = 900
+      const tilt = 0.45
+      const spin = 0.9
+      let seed = 3
+      const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
+      let markup = ''
+      for (let i = 0; i < n; i++) {
+        const y0 = 1 - (i / (n - 1)) * 2
+        const r = Math.sqrt(1 - y0 * y0)
+        const t = i * Math.PI * (3 - Math.sqrt(5))
+        let x = Math.cos(t) * r
+        let z = Math.sin(t) * r
+        // rotate around Y then X
+        const x1 = x * Math.cos(spin) + z * Math.sin(spin)
+        const z1 = -x * Math.sin(spin) + z * Math.cos(spin)
+        const y1 = y0 * Math.cos(tilt) - z1 * Math.sin(tilt)
+        const z2 = y0 * Math.sin(tilt) + z1 * Math.cos(tilt)
+        const depth = (z2 + 1) / 2
+        const size = 0.006 + depth * 0.011 + rand() * 0.004
+        const roll = rand()
+        const color = roll < 0.12 ? '#ffece8' : roll < 0.4 ? '#ff4d2e' : '#e10600'
+        const alpha = (0.15 + depth * 0.75).toFixed(2)
+        markup += `<circle cx="${x1.toFixed(3)}" cy="${y1.toFixed(3)}" r="${size.toFixed(4)}" fill="${color}" opacity="${alpha}"/>`
+      }
+      svg.innerHTML = markup
+    </script>
+  </body>
+</html>
