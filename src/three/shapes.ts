@@ -102,6 +102,59 @@ export const ring = (count: number) =>
 
 export const SHAPES = [sphere, wave, lattice, helix, ring]
 
+/**
+ * Bankai: a broad-bladed katana with a round guard and a short chain from the pommel —
+ * an original nod to Tensa Zangetsu. Built upright, then tilted diagonally.
+ */
+export const sword = (count: number) =>
+  build(count, 9, (_i, _n, rand) => {
+    const jitter = (amount: number) => (rand() - 0.5) * amount
+    let x: number
+    let y: number
+    let z = jitter(0.06)
+    const part = rand()
+
+    if (part < 0.6) {
+      // Blade: long and broad, edges denser than the middle, angled tip.
+      const t = rand()
+      const tip = t > 0.84 ? (1 - t) / 0.16 : 1
+      const half = 0.32 * tip
+      const across = rand() < 0.6 ? (rand() < 0.5 ? -1 : 1) * (1 - rand() * 0.12) : rand() * 2 - 1
+      x = across * half + (t > 0.84 ? (t - 0.84) * 1.7 : 0)
+      y = -0.45 + t * 4.7
+    } else if (part < 0.72) {
+      // Round guard (tsuba): a ring with a thin rim, seen face-on.
+      const a = rand() * Math.PI * 2
+      const r = 0.3 + Math.sqrt(rand()) * 0.3
+      x = Math.cos(a) * r
+      y = -0.62 + Math.sin(a) * r * 0.35
+      z = Math.sin(a) * r * 0.9 + jitter(0.04)
+    } else if (part < 0.87) {
+      // Handle with a criss-cross wrap.
+      const t = rand()
+      y = -0.75 - t * 1.15
+      const wrap = Math.sin(t * Math.PI * 14) * 0.09
+      x = rand() < 0.5 ? wrap + jitter(0.03) : (rand() * 2 - 1) * 0.13
+    } else {
+      // Chain: alternating links swinging out from the pommel.
+      const t = rand()
+      const link = Math.floor(t * 13)
+      const cx = Math.sin(t * 2.4) * 0.8 * t + t * 0.35
+      const cy = -1.95 - t * 1.3
+      const a = rand() * Math.PI * 2
+      x = cx + Math.cos(a) * 0.07
+      y = cy + (link % 2 ? Math.sin(a) * 0.07 : 0)
+      z = link % 2 ? jitter(0.02) : Math.sin(a) * 0.07
+    }
+
+    // Tilt the whole sword diagonally, scale to fit the view, centre it.
+    const tilt = -0.62
+    const s = 0.72
+    const cx = x * Math.cos(tilt) - (y - 0.3) * Math.sin(tilt)
+    const cy = x * Math.sin(tilt) + (y - 0.3) * Math.cos(tilt)
+    return [cx * s, cy * s, z]
+  })
+
 /** Random outward directions used to burst the cloud apart mid-morph. */
 export const scatter = (count: number) =>
   build(count, 6, (_i, _n, rand) => {

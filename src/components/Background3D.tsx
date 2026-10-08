@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { ParticleField } from '../three/ParticleField'
 import { isReducedMotion } from '../motion'
+import { isBankai, onBankai } from '../bankai'
 
 // One entry per section, in page order; index = the shape the field morphs into (see SHAPES).
 // side: where the shape sits on wide screens (-1 left, 1 right) so it never covers the copy.
@@ -62,6 +63,13 @@ function run(canvas: HTMLCanvasElement, Field: FieldClass) {
     field.setPointer(event.clientX / window.innerWidth - 0.5, event.clientY / window.innerHeight - 0.5)
   }
 
+  // Bankai: the cloud forms the sword during the transformation, then stays black-and-red.
+  field.setBankai(isBankai())
+  const offBankai = onBankai((on) => {
+    field.setBankai(on)
+    if (on) field.pulseSword(2800)
+  })
+
   update()
   // Reduced motion still follows the scroll from shape to shape, just calmly (see play()).
   field.play({ gentle: isReducedMotion() })
@@ -69,6 +77,7 @@ function run(canvas: HTMLCanvasElement, Field: FieldClass) {
   window.addEventListener('resize', onResize)
   window.addEventListener('pointermove', onPointer, { passive: true })
   return () => {
+    offBankai()
     window.removeEventListener('scroll', update)
     window.removeEventListener('resize', onResize)
     window.removeEventListener('pointermove', onPointer)

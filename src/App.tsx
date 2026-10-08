@@ -2,6 +2,8 @@ import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
 import { ScrollProgress } from './components/ScrollProgress'
 import { Background3D } from './components/Background3D'
+import { Reiatsu } from './components/Reiatsu'
+import { BankaiOverlay } from './components/BankaiOverlay'
 import { About } from './components/About'
 import { Skills } from './components/Skills'
 import { Projects } from './components/Projects'
@@ -17,6 +19,8 @@ function App() {
       <Navbar />
       <Background3D />
       <ScrollProgress />
+      <Reiatsu />
+      <BankaiOverlay />
       <main>
         <Hero />
         <About />

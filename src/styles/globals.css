@@ -829,6 +829,150 @@ main,
   transform-origin: left center;
 }
 
+/* ---------- Bleach homage: hollow mask, reiatsu, Bankai (src/bankai.ts) ---------- */
+
+.brand-mark-text,
+.brand-mark::after {
+  transition: opacity 0.2s ease;
+}
+
+.hollow-mask {
+  position: absolute;
+  inset: 1px;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  opacity: 0;
+  transform: scale(0.4) rotate(-14deg);
+  transition:
+    opacity 0.2s ease,
+    transform 0.4s cubic-bezier(0.2, 1.7, 0.4, 1);
+  pointer-events: none;
+}
+
+/* The cracks draw themselves in as the mask lands (paths use pathLength=1). */
+.mask-crack path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.4s ease 0.15s;
+}
+
+.brand:hover .hollow-mask,
+.brand:focus-visible .hollow-mask,
+html[data-bankai] .hollow-mask {
+  opacity: 1;
+  transform: none;
+}
+
+.brand:hover .mask-crack path,
+.brand:focus-visible .mask-crack path,
+html[data-bankai] .mask-crack path {
+  stroke-dashoffset: 0;
+}
+
+.brand:hover .brand-mark-text,
+.brand:hover .brand-mark::after,
+.brand:focus-visible .brand-mark-text,
+html[data-bankai] .brand-mark-text,
+html[data-bankai] .brand-mark::after {
+  opacity: 0;
+}
+
+/* Cursor aura canvas: above the page content, below the header. */
+.reiatsu {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Transformation overlay */
+.bankai-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  place-items: center;
+  pointer-events: none;
+}
+
+.bankai-overlay.is-playing {
+  display: grid;
+}
+
+.bankai-overlay > * {
+  grid-area: 1 / 1;
+}
+
+.bankai-flash {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 55%, rgba(255, 40, 25, 0.85), rgba(60, 0, 0, 0.9) 45%, #000 80%);
+}
+
+.bankai-title {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(4rem, min(19vw, 30vh), 15rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  text-shadow:
+    0 0 2px rgba(255, 60, 40, 1),
+    0 0 30px rgba(255, 30, 20, 0.9),
+    0 0 90px rgba(255, 30, 20, 0.6);
+  opacity: 0;
+}
+
+.bankai-sub {
+  position: relative;
+  align-self: end;
+  margin-bottom: 18vh;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.4vw, 1.6rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7em;
+  color: var(--text);
+  opacity: 0;
+}
+
+.bankai-toast {
+  position: relative;
+  align-self: end;
+  margin-bottom: 4.5rem;
+  padding: 0.7rem 1.3rem;
+  border: 1px solid rgba(255, 60, 50, 0.45);
+  border-radius: 999px;
+  background: rgba(12, 10, 10, 0.92);
+  font-weight: 600;
+  opacity: 0;
+}
+
+/* Bankai mode: everything burns a little hotter. */
+html[data-bankai] {
+  --accent-glow: rgba(255, 30, 20, 0.75);
+}
+
+html[data-bankai] body::before {
+  background: radial-gradient(ellipse at 50% 40%, transparent 35%, rgba(70, 0, 0, 0.6) 100%);
+}
+
+html[data-bankai] .hero-line-accent {
+  text-shadow:
+    0 0 40px rgba(255, 30, 20, 0.8),
+    0 0 100px rgba(255, 30, 20, 0.45);
+}
+
+html[data-bankai] .brand-mark {
+  border-color: var(--accent);
+  box-shadow: 0 0 18px var(--accent-glow);
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 900px) {

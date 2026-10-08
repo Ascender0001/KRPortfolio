@@ -4,6 +4,7 @@ import './styles/variables.css'
 import './styles/globals.css'
 import './styles/animations.css'
 import './motion'
+import './bankai'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(

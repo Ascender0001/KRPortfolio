@@ -2,6 +2,11 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { animate, createTimeline, utils } from 'animejs'
 import { navLinks, site } from '../data/portfolio'
 import { isReducedMotion } from '../motion'
+import { tapTrigger } from '../bankai'
+import { HollowMask } from './HollowMask'
+
+// Five quick taps on the logo trigger Bankai on phones (no keyboard to type it).
+const onLogoTap = tapTrigger()
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -92,8 +97,11 @@ export function Navbar() {
       ref={navRef}
     >
       <nav className="navbar" aria-label="Fő navigáció">
-        <a className="brand" href="#hero" aria-label="Király Róbert kezdőlap">
-          <span className="brand-mark">{site.brand}</span>
+        <a className="brand" href="#hero" aria-label="Király Róbert kezdőlap" onClick={onLogoTap}>
+          <span className="brand-mark">
+            <span className="brand-mark-text">{site.brand}</span>
+            <HollowMask />
+          </span>
           <span className="brand-name">{site.name}</span>
         </a>
 
