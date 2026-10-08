@@ -25,12 +25,12 @@ function MotionSwitch() {
   return (
     <button
       type="button"
-      className="tech-label motion-switch"
+      className="motion-switch"
       onClick={cycle}
       title="Animációk váltása"
       aria-label={`Animációk: ${motionLabels[preference].toLowerCase()} (váltás)`}
     >
-      ANIM // {motionLabels[preference]}
+      Animációk: {motionLabels[preference].toLowerCase()}
     </button>
   )
 }
@@ -42,13 +42,13 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <div className="footer-inner" ref={innerRef}>
-        <p className="tech-label">
-          © {year} {site.name.toUpperCase()}
+        <p className="footer-text">
+          © {year} {site.name}
         </p>
         <div className="footer-meta">
           <MotionSwitch />
-          <p className="tech-label">
-            <span className="status-dot" aria-hidden="true" /> SYS.ONLINE — {site.brand}//PORTFÓLIÓ
+          <p className="footer-text">
+            Szabadka, Szerbia
           </p>
         </div>
       </div>

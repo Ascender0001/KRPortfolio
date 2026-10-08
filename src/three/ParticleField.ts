@@ -1,0 +1,208 @@
+import {
+  AdditiveBlending,
+  BufferAttribute,
+  BufferGeometry,
+  Group,
+  PerspectiveCamera,
+  Points,
+  Scene,
+  ShaderMaterial,
+  WebGLRenderer,
+} from 'three'
+import { SHAPES, colors, scatter, seeds } from './shapes'
+
+const vertexShader = /* glsl */ `
+  uniform float uTime;
+  uniform float uProgress;
+  uniform float uSize;
+  uniform float uPixelRatio;
+  uniform float uOpacity;
+
+  attribute vec3 aShape1;
+  attribute vec3 aShape2;
+  attribute vec3 aShape3;
+  attribute vec3 aShape4;
+  attribute vec3 aScatter;
+  attribute vec3 aColor;
+  attribute float aSeed;
+
+  varying vec3 vColor;
+  varying float vAlpha;
+
+  float weight(float i) {
+    return clamp(1.0 - abs(uProgress - i), 0.0, 1.0);
+  }
+
+  void main() {
+    float w0 = weight(0.0);
+    float w1 = weight(1.0);
+    float w2 = weight(2.0);
+    float w3 = weight(3.0);
+    float w4 = weight(4.0);
+
+    vec3 p = position * w0 + aShape1 * w1 + aShape2 * w2 + aShape3 * w3 + aShape4 * w4;
+
+    // Each shape keeps a little life of its own.
+    p += normalize(position + 1e-4) * sin(uTime * 0.9 + aSeed * 6.2831) * 0.07 * w0;
+    p.y += sin(aShape1.x * 1.4 + uTime * 1.3) * cos(aShape1.z * 0.8 + uTime * 0.7) * 0.32 * w1;
+    p += normalize(aShape4 + 1e-4) * sin(uTime * 2.0 + atan(aShape4.y, aShape4.x) * 6.0) * 0.06 * w4;
+
+    // Burst apart halfway between two shapes, re-form on arrival.
+    float between = 4.0 * max(max(w0 * w1, w1 * w2), max(w2 * w3, w3 * w4));
+    p += aScatter * between * 1.7;
+
+    // Gentle drift so the cloud never sits perfectly still.
+    p += vec3(
+      sin(uTime * 0.6 + aSeed * 21.0),
+      cos(uTime * 0.5 + aSeed * 13.0),
+      sin(uTime * 0.4 + aSeed * 7.0)
+    ) * 0.035;
+
+    vec4 mv = modelViewMatrix * vec4(p, 1.0);
+    gl_Position = projectionMatrix * mv;
+    gl_PointSize = uSize * uPixelRatio * (0.55 + aSeed * 0.9) * (1.0 + between * 0.6) / -mv.z;
+
+    vColor = aColor;
+    float twinkle = 0.65 + 0.35 * sin(uTime * 1.7 + aSeed * 40.0);
+    vAlpha = uOpacity * twinkle;
+  }
+`
+
+const fragmentShader = /* glsl */ `
+  varying vec3 vColor;
+  varying float vAlpha;
+
+  void main() {
+    float d = length(gl_PointCoord - 0.5);
+    if (d > 0.5) discard;
+    float glow = smoothstep(0.5, 0.0, d);
+    gl_FragColor = vec4(vColor, glow * glow * vAlpha);
+  }
+`
+
+interface Target {
+  progress: number
+  offsetX: number
+  opacity: number
+}
+
+const approach = (from: number, to: number, rate: number) => from + (to - from) * rate
+
+/**
+ * Full-screen particle cloud that morphs between SHAPES as `progress` moves from 0 to 4.
+ * The page sets targets; the field eases toward them every frame so motion stays fluid.
+ */
+export class ParticleField {
+  private renderer: WebGLRenderer
+  private scene = new Scene()
+  private camera = new PerspectiveCamera(45, 1, 0.1, 100)
+  private group = new Group()
+  private material: ShaderMaterial
+  private geometry = new BufferGeometry()
+  private frame = 0
+  private start = performance.now()
+  private target: Target = { progress: 0, offsetX: 0, opacity: 1 }
+  private current: Target = { progress: 0, offsetX: 0, opacity: 0 }
+  private pointer = { x: 0, y: 0, sx: 0, sy: 0 }
+
+  private canvas: HTMLCanvasElement
+
+  constructor(canvas: HTMLCanvasElement, count: number) {
+    this.canvas = canvas
+    this.renderer = new WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: 'high-performance' })
+    this.renderer.setClearColor(0x000000, 0)
+
+    const shapes = SHAPES.map((shape) => shape(count))
+    this.geometry.setAttribute('position', new BufferAttribute(shapes[0], 3))
+    shapes.slice(1).forEach((shape, i) => this.geometry.setAttribute(`aShape${i + 1}`, new BufferAttribute(shape, 3)))
+    this.geometry.setAttribute('aScatter', new BufferAttribute(scatter(count), 3))
+    this.geometry.setAttribute('aColor', new BufferAttribute(colors(count), 3))
+    this.geometry.setAttribute('aSeed', new BufferAttribute(seeds(count), 1))
+
+    this.material = new ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      transparent: true,
+      depthWrite: false,
+      blending: AdditiveBlending,
+      uniforms: {
+        uTime: { value: 0 },
+        uProgress: { value: 0 },
+        uSize: { value: 30 },
+        uPixelRatio: { value: 1 },
+        uOpacity: { value: 0 },
+      },
+    })
+
+    const points = new Points(this.geometry, this.material)
+    points.frustumCulled = false
+    this.group.add(points)
+    this.scene.add(this.group)
+    this.camera.position.set(0, 0, 7.5)
+
+    this.resize()
+  }
+
+  setTarget(target: Target) {
+    this.target = target
+  }
+
+  setPointer(x: number, y: number) {
+    this.pointer.x = x
+    this.pointer.y = y
+  }
+
+  resize() {
+    const width = this.canvas.clientWidth
+    const height = this.canvas.clientHeight
+    const ratio = Math.min(window.devicePixelRatio, 1.75)
+    this.renderer.setPixelRatio(ratio)
+    this.renderer.setSize(width, height, false)
+    this.camera.aspect = width / Math.max(1, height)
+    this.camera.updateProjectionMatrix()
+    this.material.uniforms.uPixelRatio.value = ratio
+  }
+
+  /** Animated: eases toward the target and keeps the cloud alive. */
+  play() {
+    const loop = () => {
+      this.frame = requestAnimationFrame(loop)
+      this.step(0.06)
+    }
+    loop()
+  }
+
+  /** Reduced motion: jump straight to the target and draw one still frame. */
+  still() {
+    this.current = { ...this.target }
+    this.step(0, false)
+  }
+
+  private step(rate: number, animate = true) {
+    const time = animate ? (performance.now() - this.start) / 1000 : 0
+    const c = this.current
+    c.progress = approach(c.progress, this.target.progress, rate || 1)
+    c.offsetX = approach(c.offsetX, this.target.offsetX, rate || 1)
+    c.opacity = approach(c.opacity, this.target.opacity, rate ? rate * 0.6 : 1)
+    this.pointer.sx = approach(this.pointer.sx, this.pointer.x, 0.05)
+    this.pointer.sy = approach(this.pointer.sy, this.pointer.y, 0.05)
+
+    const u = this.material.uniforms
+    u.uTime.value = time
+    u.uProgress.value = c.progress
+    u.uOpacity.value = c.opacity
+
+    this.group.position.x = c.offsetX
+    this.group.rotation.y = time * 0.09 + c.progress * 1.1 + this.pointer.sx * 0.35
+    this.group.rotation.x = Math.sin(time * 0.15) * 0.12 + this.pointer.sy * 0.25
+
+    this.renderer.render(this.scene, this.camera)
+  }
+
+  dispose() {
+    cancelAnimationFrame(this.frame)
+    this.geometry.dispose()
+    this.material.dispose()
+    this.renderer.dispose()
+  }
+}

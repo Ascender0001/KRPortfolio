@@ -2,7 +2,7 @@
 
 Personal portfolio of Király Róbert — live at **[ascender.codes](https://ascender.codes/)**.
 
-Built with React 19, TypeScript and Vite, with entrance/scroll motion driven by [anime.js](https://animejs.com/). Hosted on Netlify.
+Built with React 19, TypeScript and Vite. A three.js particle field behind the page morphs into a new shape for each section as you scroll; text motion uses [anime.js](https://animejs.com/). Hosted on Netlify.
 
 ## Development
 
@@ -17,14 +17,15 @@ npm run lint     # oxlint
 
 - `src/data/portfolio.ts` — all site content (text, projects, skills, contact channels). Edit this to update the page.
 - `src/components/` — page sections (Hero, About, Skills, Projects, Contact, …).
-- `src/scroll/engine.ts` — the scroll engine: pinned sections whose animations are scrubbed by (smoothed) scroll position, with each section handing off to the next.
+- `src/three/` — the WebGL particle field (`ParticleField.ts`) and the point-cloud shapes it morphs between (`shapes.ts`); `src/components/Background3D.tsx` maps scroll position to shapes. three.js is lazy-loaded.
+- `src/scroll/` — scroll-scrubbed text reveals tied to a smoothed scroll position.
 - `src/hooks/` — one-shot reveal helpers used in reduced-motion mode.
 - `src/styles/` — design tokens, global styles and animations.
 - `public/` — static files served as-is (favicon, CV, robots.txt, sitemap).
 
 ## Motion
 
-The full experience is one continuous scroll-driven animation (see `src/scroll/engine.ts`). Animations follow the OS `prefers-reduced-motion` setting: when it is on, the site becomes a normal page with short fades. The low-key `ANIM //` switch in the footer overrides this per visitor (auto → full → reduced), stored in `localStorage` under `kr-motion`. See `src/motion.ts`.
+Animations follow the OS `prefers-reduced-motion` setting: when it is on, the particle field is a still image and text uses short fades. The low-key "Animációk" switch in the footer overrides this per visitor (auto → full → reduced), stored in `localStorage` under `kr-motion`. See `src/motion.ts`.
 
 ## Deployment
 

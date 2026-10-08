@@ -1,6 +1,7 @@
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
 import { ScrollProgress } from './components/ScrollProgress'
+import { Background3D } from './components/Background3D'
 import { About } from './components/About'
 import { Skills } from './components/Skills'
 import { Projects } from './components/Projects'
@@ -14,6 +15,7 @@ function App() {
         Ugrás a tartalomra
       </a>
       <Navbar />
+      <Background3D />
       <ScrollProgress />
       <main>
         <Hero />

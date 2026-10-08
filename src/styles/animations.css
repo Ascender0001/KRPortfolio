@@ -1,31 +1,24 @@
-/* Anime.js drives all entrance/reveal choreography (see src/hooks/useReveal.ts).
-   Micro-loops (blink/pulse) remain as CSS keyframes. */
+/* Small CSS loops; everything scroll-linked lives in src/scroll and src/three. */
 
-@keyframes scroll-pulse {
+@keyframes live-pulse {
   0% {
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-  45% {
-    transform: scaleY(1);
-    transform-origin: top;
-  }
-  55% {
-    transform: scaleY(1);
-    transform-origin: bottom;
+    box-shadow: 0 0 0 0 rgba(255, 42, 31, 0.55);
   }
   100% {
-    transform: scaleY(0);
-    transform-origin: bottom;
+    box-shadow: 0 0 0 10px rgba(255, 42, 31, 0);
   }
 }
 
-@keyframes status-blink {
-  0%,
-  100% {
+@keyframes wheel {
+  0% {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  30% {
     opacity: 1;
   }
-  50% {
-    opacity: 0.25;
+  100% {
+    opacity: 0;
+    transform: translateY(9px);
   }
 }

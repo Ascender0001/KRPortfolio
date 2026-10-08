@@ -93,7 +93,7 @@ export function Navbar() {
     >
       <nav className="navbar" aria-label="Fő navigáció">
         <a className="brand" href="#hero" aria-label="Király Róbert kezdőlap">
-          <span className="brand-mark">{site.brand}//</span>
+          <span className="brand-mark">{site.brand}</span>
           <span className="brand-name">{site.name}</span>
         </a>
 
@@ -114,7 +114,6 @@ export function Navbar() {
         >
           {navLinks.map((link) => (
             <a key={link.href} href={link.href} onClick={() => setIsOpen(false)}>
-              <span className="nav-index">{link.index}</span>
               {link.label}
             </a>
           ))}

@@ -1,43 +1,33 @@
 :root {
   color-scheme: dark;
 
-  /* Main background: near-black */
-  --bg: #0a0a0a;
-  --bg-secondary: #0f0f0f;
-  --surface: #121212;
-  --surface-strong: #1a1414;
+  /* Near-black canvas: the particle field glows on top of it */
+  --bg: #070707;
+  --surface: rgba(20, 16, 16, 0.55);
+  --surface-strong: rgba(30, 20, 20, 0.75);
 
   /* Signature red */
   --accent: #e10600;
-  --accent-bright: #ff2a1f; /* hover / pressed variant */
+  --accent-bright: #ff2a1f;
   --accent-text: #ff4a3d; /* red that stays readable as small text on black */
   --accent-dim: rgba(225, 6, 0, 0.16);
   --accent-glow: rgba(255, 30, 20, 0.45);
   --on-accent: #ffffff;
 
-  /* Light UI */
-  --invert-bg: #f2f2f2;
-  --invert-text: #0a0a0a;
-  --steel: #6b6566;
-
   /* Text */
-  --text: #f2f2f2;
-  --muted: #a39d9d;
+  --text: #f4f1f1;
+  --muted: #a8a0a0;
+  --faint: #6f6767;
 
-  /* Lines / borders */
-  --line: #2a2424;
-  --line-soft: rgba(255, 60, 50, 0.07);
-  --line-strong: #4f4545;
+  /* Lines */
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.18);
 
-  --font-display: 'Inter', sans-serif;
-  --font-ui: 'IBM Plex Mono', monospace;
-  --font-title: 'Oswald', 'Inter', sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
 
-  --content-width: 1180px;
-  --header-height: 72px;
-  --section-padding: clamp(80px, 10vw, 180px);
-
-  /* Cinematic motion */
-  --ease-cine: cubic-bezier(0.22, 0.61, 0.36, 1);
-  --dur-cine: 0.9s;
+  --content-width: 1200px;
+  --header-height: 76px;
+  --radius: 22px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
