@@ -1,80 +1,116 @@
 // Original stylized hollow mask (Bleach / Ichigo homage) that cracks onto the KR logo on
-// hover and stays on in Bankai mode. Drawn from scratch: shaded bone-white face, red
-// stripes broken by one eye, black eyes with yellow irises, an open jaw of teeth, cracks.
+// hover and stays on in Bankai mode. Drawn from scratch in a grunge style: half a bone-white
+// face that splinters into splatter on the left, red claw stripes sweeping over the brow,
+// one black eye with a glowing yellow iris, and a jagged row of teeth.
 
-const TEETH = [13.3, 15.2, 17.1, 19, 20.9, 22.8, 24.7]
+// Mouth runs along two slightly slanted lines; teeth are triangles hanging off each.
+const upper = (x: number) => 28.9 - (x - 15.4) * 0.1
+const lower = (x: number) => 33.3 - (x - 16.6) * 0.1
+const UPPER_TEETH = Array.from({ length: 8 }, (_, i) => 15.6 + i * 1.95)
+const LOWER_TEETH = Array.from({ length: 7 }, (_, i) => 16.9 + i * 1.95)
+
+// Splatter where the face breaks apart: [x, y, r, opacity].
+const SPLATTER: [number, number, number, number][] = [
+  [11.4, 5.6, 0.55, 0.9],
+  [8.6, 9.4, 0.75, 0.85],
+  [6.4, 12.8, 0.4, 0.7],
+  [9.2, 14.6, 0.35, 0.8],
+  [6.9, 18.2, 0.9, 0.75],
+  [4.8, 21.6, 0.35, 0.6],
+  [8.4, 22.8, 0.5, 0.8],
+  [6.2, 26.4, 0.45, 0.65],
+  [9.6, 27.8, 0.7, 0.8],
+  [7.4, 30.6, 0.3, 0.6],
+  [10.8, 32.4, 0.45, 0.75],
+  [12.6, 35.8, 0.4, 0.7],
+  [4.2, 16.2, 0.25, 0.5],
+  [5.6, 29.4, 0.2, 0.5],
+]
+
+// Grit on the bone.
+const SPECKS: [number, number, number][] = [
+  [21.4, 25.6, 0.22],
+  [30.4, 24.6, 0.18],
+  [25.2, 7.4, 0.16],
+  [33.2, 15.2, 0.2],
+  [18.6, 22.2, 0.18],
+  [27.6, 33.8, 0.2],
+  [15.8, 15.4, 0.16],
+]
 
 export function HollowMask() {
   return (
     <svg className="hollow-mask" viewBox="0 0 40 40" aria-hidden="true">
       <defs>
-        <radialGradient id="hm-bone" cx="45%" cy="38%" r="70%">
-          <stop offset="0" stopColor="#fdfbf6" />
-          <stop offset="0.65" stopColor="#ece6da" />
-          <stop offset="1" stopColor="#c9c1b2" />
-        </radialGradient>
-        <linearGradient id="hm-stripe" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#ff2a1f" />
-          <stop offset="1" stopColor="#8f0000" />
+        <linearGradient id="hm-bone" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#5d5953" />
+          <stop offset="0.38" stopColor="#d9d3c7" />
+          <stop offset="0.7" stopColor="#f6f3ec" />
+          <stop offset="1" stopColor="#e2dccf" />
         </linearGradient>
+        <linearGradient id="hm-stripe" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#ff2a1f" />
+          <stop offset="1" stopColor="#9a0000" />
+        </linearGradient>
+        <filter id="hm-glow" x="-1" y="-1" width="3" height="3">
+          <feGaussianBlur stdDeviation="0.8" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
 
-      {/* Face: wide brow, cheekbones, narrowing jaw */}
+      {/* Face: solid on the right, ragged and splintering on the left */}
       <path
         fill="url(#hm-bone)"
-        stroke="#8f877a"
-        strokeWidth="0.45"
-        d="M20 2.2C29.8 2.2 35.6 8.8 35.6 17.4C35.6 22.6 34 26.6 31.6 29.6C30.4 31.2 29.6 33.2 28.4 35.2C27.8 36.3 26.8 37 25.6 37H14.4C13.2 37 12.2 36.3 11.6 35.2C10.4 33.2 9.6 31.2 8.4 29.6C6 26.6 4.4 22.6 4.4 17.4C4.4 8.8 10.2 2.2 20 2.2Z"
+        d="M17.2 2.8C24.4 2.2 31.2 4.6 34.6 10.4C36.8 14.2 36.8 19.6 35.6 23.6C34.6 27 32.8 29.8 30.6 32.6C28.6 35.2 26 37.4 22.4 37.9C20.2 38.2 17.8 37.9 16.4 37.2L15.1 35.4L15.9 33.6L13.8 32.2L14.9 30.4L12.4 28.6L13.6 26.4L11.2 24.8L12.6 22.6L10.4 20.6L12.2 18.6L9.8 16.4L12.1 14.6L10.6 12.2L12.9 10.6L11.9 8.2L14.4 7.1L13.9 4.6Z"
       />
-
-      {/* Shading: brow ridges, cheek hollows, centre line */}
-      <g fill="none" stroke="#7d7568" strokeLinecap="round" opacity="0.55">
-        <path strokeWidth="0.6" d="M7.6 12.8Q12.8 10.6 18.6 13.4" />
-        <path strokeWidth="0.6" d="M32.4 12.8Q27.2 10.6 21.4 13.4" />
-        <path strokeWidth="0.4" d="M9 23.4Q11.6 25.6 14.2 25.2" />
-        <path strokeWidth="0.4" d="M31 23.4Q28.4 25.6 25.8 25.2" />
-        <path strokeWidth="0.35" d="M20 5V11.5" opacity="0.6" />
-      </g>
-
-      {/* Red stripes on one side, interrupted by the eye */}
-      <g fill="url(#hm-stripe)">
-        <path d="M23.2 2.6L25.8 2.5L27.6 12.4L25.4 13Z" />
-        <path d="M27.9 3.4L30.6 5L31.4 13.2L29.3 13.4Z" />
-        <path d="M25.8 21.8L27.9 21.4L28.6 31.8L27 34.6L26.6 30Z" />
-        <path d="M29.5 21.2L31.6 20.4L31.4 27.4L30 29.6Z" />
-      </g>
-
-      {/* Eyes: black, slanted, with yellow irises */}
-      <g fill="#0a0a0a">
-        <path d="M8.4 14.4Q13 15.2 17.8 16.8L16.9 20.2Q12.6 20.6 9.8 19.4Q8.6 17.4 8.4 14.4Z" />
-        <path d="M31.6 14.4Q27 15.2 22.2 16.8L23.1 20.2Q27.4 20.6 30.2 19.4Q31.4 17.4 31.6 14.4Z" />
-      </g>
-      <g className="mask-irises">
-        <circle cx="13.7" cy="18" r="1.3" fill="#ffd21f" />
-        <circle cx="26.3" cy="18" r="1.3" fill="#ffd21f" />
-        <circle cx="13.7" cy="18" r="0.55" fill="#0a0a0a" />
-        <circle cx="26.3" cy="18" r="0.55" fill="#0a0a0a" />
-      </g>
-
-      {/* Nose slits */}
-      <path fill="none" stroke="#5f584d" strokeWidth="0.55" strokeLinecap="round" d="M19 22.4L19.5 24.2M21 22.4L20.5 24.2" />
-
-      {/* Open jaw with two rows of teeth */}
-      <path fill="#0a0a0a" d="M12.2 27.2Q20 26.2 27.8 27.2L27.3 30.8Q20 31.8 12.7 30.8Z" />
-      <g fill="url(#hm-bone)">
-        {TEETH.map((x) => (
-          <rect key={`t${x}`} x={x} y="27" width="1.5" height="1.75" rx="0.35" />
+      <g fill="#d9d4ca">
+        {SPLATTER.map(([x, y, r, o]) => (
+          <circle key={`${x}-${y}`} cx={x} cy={y} r={r} opacity={o} />
         ))}
-        {TEETH.map((x) => (
-          <rect key={`b${x}`} x={x + 0.1} y="29.2" width="1.4" height="1.6" rx="0.35" />
+      </g>
+
+      {/* Red claw stripes sweeping from the brow toward the eye */}
+      <g fill="url(#hm-stripe)">
+        <path d="M14.8 8Q21.8 11.2 24.6 18.6Q19.4 14.6 13.8 11.8Z" />
+        <path d="M18 3.8Q24.4 7.2 27.2 14.6Q22 10.2 16.8 6.6Z" />
+        <path d="M22.4 3Q28.2 6.2 30.4 13.4Q26 9.2 21.2 5.4Z" />
+        <path d="M27 3.8Q31.8 6.8 33.6 12.6Q30 9.4 26 5.9Z" />
+      </g>
+
+      {/* Brow shadow and a faint hollow where the left eye breaks apart */}
+      <path fill="none" stroke="#3b3732" strokeWidth="0.6" strokeLinecap="round" d="M21 16.2Q26.4 13.6 33 15.6" />
+      <path fill="#2b2824" opacity="0.65" d="M11.8 18.8Q14.2 17.4 17.4 18.8Q15.2 20.6 12.6 20.1Z" />
+
+      {/* The eye: black, slanted, glowing yellow iris with a slit pupil */}
+      <path fill="#0a0a0a" d="M20.6 19.4Q25.6 15.4 32.2 17.2Q28 21.8 21.8 21.2Z" />
+      <ellipse cx="27.2" cy="18.7" rx="2.7" ry="1.55" fill="#ffd21f" filter="url(#hm-glow)" />
+      <ellipse cx="27.2" cy="18.7" rx="0.45" ry="1.3" fill="#0a0a0a" />
+
+      {/* Jagged teeth */}
+      <path fill="#0a0a0a" d={`M15.4 ${upper(15.4)}L31.6 ${upper(31.6)}L30.2 ${lower(30.2)}L16.6 ${lower(16.6)}Z`} />
+      <g fill="#f1ede4">
+        {UPPER_TEETH.map((x) => (
+          <path key={`u${x}`} d={`M${x} ${upper(x) - 0.2}L${x + 1.95} ${upper(x + 1.95) - 0.2}L${x + 0.95} ${upper(x) + 2.5}Z`} />
+        ))}
+        {LOWER_TEETH.map((x) => (
+          <path key={`l${x}`} d={`M${x} ${lower(x) + 0.2}L${x + 1.95} ${lower(x + 1.95) + 0.2}L${x + 1} ${lower(x) - 2.3}Z`} />
+        ))}
+      </g>
+
+      {/* Grit */}
+      <g fill="#3b3732" opacity="0.45">
+        {SPECKS.map(([x, y, r]) => (
+          <circle key={`${x}-${y}`} cx={x} cy={y} r={r} />
         ))}
       </g>
 
       {/* Cracks: drawn in when the mask lands */}
-      <g className="mask-crack" fill="none" stroke="#3a3530" strokeLinecap="round" strokeLinejoin="round">
-        <path pathLength="1" strokeWidth="0.5" d="M18.2 2.4L17 6.2L19.4 8.8L17.6 12.4L18.6 14.2" />
-        <path pathLength="1" strokeWidth="0.35" d="M19.4 8.8L22 10.2L23.4 9.4" />
-        <path pathLength="1" strokeWidth="0.35" d="M6.2 22.6L8.6 23.2L9.4 25.6" />
+      <g className="mask-crack" fill="none" stroke="#2e2a26" strokeLinecap="round" strokeLinejoin="round">
+        <path pathLength="1" strokeWidth="0.45" d="M34.8 21.6L32.4 22.8L33 25.4L30.8 26.6" />
+        <path pathLength="1" strokeWidth="0.35" d="M24.4 24.4L22.8 25.6L23.6 27" />
       </g>
     </svg>
   )
